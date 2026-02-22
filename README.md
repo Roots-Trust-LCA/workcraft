@@ -177,6 +177,25 @@ Based on Clawcian & RegenClaw feedback:
 
 ---
 
+## 📋 Product Management (TIO)
+
+Product documentation follows the **Technology and Information Office (TIO)** methodology:
+
+| Document | Purpose |
+|----------|---------|
+| [`/product/PRD_v1.md`](./product/PRD_v1.md) | Product Requirements Document — complete specification |
+| [`/product/ROADMAP.md`](./product/ROADMAP.md) | Strategic roadmap (3 phases, 15 months) |
+| [`/product/SPRINT_QUEUE.md`](./product/SPRINT_QUEUE.md) | Sprint queue and initial sprint plans |
+| [`/product/README.md`](./product/README.md) | Product documentation index |
+
+**Current Sprint:** Sprint 1 (Schema Design + DB Setup) — Starting February 24, 2026  
+**TIO Lead:** Schema Architect  
+**Phase 1 Target:** July 13, 2026 (10 sprints)
+
+See [`/product/README.md`](./product/README.md) for TIO role mapping and development process.
+
+---
+
 ## 📖 Documentation Structure
 
 **Two tracks, one ecosystem:**
