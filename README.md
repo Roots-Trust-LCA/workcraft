@@ -21,16 +21,40 @@ World of Workcraft provides organizational infrastructure that makes work legibl
 
 ---
 
-## 📚 Core Documents
+## 📚 Documentation
+
+### Enterprise Track (Professional)
+
+For organizational adoption, HR integration, and technical implementation:
 
 | Document | Description |
 |----------|-------------|
-| [WORLD_OF_WORKCRAFT_PROFESSIONAL.md](./WORLD_OF_WORKCRAFT_PROFESSIONAL.md) | **Professional Edition** — Full coordination framework for enterprise adoption |
-| [WORLD_OF_WORKCRAFT.md](./WORLD_OF_WORKCRAFT.md) | Original design document (gaming metaphor) |
-| [WORLD_OF_WORKCRAFT_LORE.md](./WORLD_OF_WORKCRAFT_LORE.md) | Guild origin stories and craft narratives |
-| [WORLD_OF_WORKCRAFT_IMPLEMENTATION.md](./WORLD_OF_WORKCRAFT_IMPLEMENTATION.md) | Technical implementation roadmap for co-op.us |
-| [World of Workcraft (WoWc).md](./World%20of%20Workcraft%20(WoWc).md) | Original concept doc + Clawcian & RegenClaw feedback |
-| [PROFESSIONAL_REFRAME.md](./PROFESSIONAL_REFRAME.md) | Vocabulary translation guide (gaming → professional) |
+| [`/docs/enterprise/`](./docs/enterprise/) | **Enterprise documentation index** |
+| [Coordination Framework](./docs/enterprise/WORKCRAFT_COORDINATION_FRAMEWORK.md) | Complete professional framework |
+| [Enterprise One-Pager](./docs/enterprise/ENTERPRISE_ONE_PAGER.md) | Executive summary |
+| [HR Career Mapping](./docs/enterprise/HR_CAREER_MAPPING.md) | Integration with HR systems |
+| [Implementation Guide](./docs/enterprise/IMPLEMENTATION_GUIDE.md) | Technical deployment |
+| [Vocabulary Reference](./docs/enterprise/VOCABULARY_REFERENCE.md) | Professional terminology |
+
+### Culture Track (Community)
+
+For internal community building, identity, and cultural work:
+
+| Document | Description |
+|----------|-------------|
+| [`/docs/culture/`](./docs/culture/) | **Culture & community documentation index** |
+| [Culture and Lore](./docs/culture/CULTURE_AND_LORE.md) | Guild origin stories and craft narratives |
+| [Presentation Deck](./docs/culture/PRESENTATION_DECK.md) | Visual presentation (forest/guild metaphors) |
+| [Original Concept](./docs/culture/ORIGINAL_CONCEPT.md) | Historical design + feedback |
+
+### Legacy Documents
+
+| Document | Description |
+|----------|-------------|
+| [WORLD_OF_WORKCRAFT_PROFESSIONAL.md](./WORLD_OF_WORKCRAFT_PROFESSIONAL.md) | Professional edition (superseded by enterprise docs) |
+| [WORLD_OF_WORKCRAFT.md](./WORLD_OF_WORKCRAFT.md) | Original design (gaming metaphor) |
+| [WORLD_OF_WORKCRAFT_IMPLEMENTATION.md](./WORLD_OF_WORKCRAFT_IMPLEMENTATION.md) | Implementation roadmap (superseded) |
+| [PROFESSIONAL_REFRAME.md](./PROFESSIONAL_REFRAME.md) | Vocabulary translation guide (reference) |
 
 ---
 
@@ -150,6 +174,22 @@ Based on Clawcian & RegenClaw feedback:
 ❌ Fake reward loops — All recognition tied to verified contribution
 
 **Filter:** Only build coordination mechanics that solve real organizational problems or make economic sustainability more likely.
+
+---
+
+## 📖 Documentation Structure
+
+**Two tracks, one ecosystem:**
+
+- **Enterprise Track** (`/docs/enterprise/`) — Professional vocabulary, HR integration, technical specs
+- **Culture Track** (`/docs/culture/`) — Guild identity, origin stories, rituals, symbols
+
+**When to use which:**
+- Enterprise adoption → Use enterprise track
+- Community building → Use culture track
+- Public materials → Blend appropriately (professional framework, cultural warmth)
+
+See [`/docs/enterprise/README.md`](./docs/enterprise/README.md) and [`/docs/culture/README.md`](./docs/culture/README.md) for guidance.
 
 ---
 
