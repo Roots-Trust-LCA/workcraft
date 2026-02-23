@@ -179,6 +179,17 @@ Based on Clawcian & RegenClaw feedback:
 
 ## 📋 Product Management (TIO)
 
+[TIO Repo](https://github.com/nou-techne/tio)
+
+| Document | Purpose |
+|----------|---------|
+| [`/product/PRD_v1.md`](./product/PRD_v1.md) | Product Requirements Document |
+| [`/product/ROADMAP.md`](./product/ROADMAP.md) | Strategic roadmap (Econ> Fed) |
+| [`/product/SPRINT_QUEUE.md`](./product/SPRINT_QUEUE.md) | Sprint queue (dependency-driven) |
+| [`/docs/WORKCRAFT_GAP_ANALYSIS.md`](./docs/WORKCRAFT_GAP_ANALYSIS.md) | Repo gaps & enhancement plan |
+
+**Current Sprint:** Q1 (SA lead).
+
 Product documentation follows the **Technology and Information Office (TIO)** methodology:
 
 | Document | Purpose |
