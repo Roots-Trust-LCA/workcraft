@@ -1,28 +1,25 @@
-# Workcraft Sprint Queue (TIO v2.0)
+# Workcraft Sprint Queue (TIO v2.1: Econ > Fed)
 
-**Current Sprint:** Q1 (Schema + DB) — SA lead.  
+**Current:** Q1 (Schema + DB) — SA lead.  
 **TIO Lead:** PE (00).
 
-**Model:** Dependency-driven; RACI v2.0 assignments.
+**Model:** Dependency-driven; RACI v2.0.
 
-## Sprint Queue (Phase 1)
+## Sprint Queue
 
-| # | Sprint | Lead Role | Status | Prereqs | RACI Escalation |
-|---|--------|-----------|--------|---------|-----------------|
-| Q1 | Schema/DB | SA (01) | 🟡 Planning | PRD approved | TL A |
-| Q2 | Core API | BE (02) | ⚪ | Q1 | TL A |
-| Q3 | Auth Int | IE (03) | ⚪ | Q2 | CS C |
-| Q4 | Profile UI | FD (07) | ⚪ | Q3 | PE A |
-| Q5 | Eng Board | FD (07) | ⚪ | Q4 | VA C |
-| Q6 | Capacity UI | FD (07) | ⚪ | Q5 | BDS C |
-| Q7 | Contrib Verif | WE (05)/ESE (04) | ⚪ | Q6 | CS R |
-| Q8 | Recognition | WE (05) | ⚪ | Q7 | PE A |
-| Q9 | Load/Polish | QATE | ⚪ | Q1-8 | TL A |
-| Q10 | Phase 1 Launch | All | ⚪ | Q9 | TL A |
+**Phase 1 (Q1-10):** Foundation (unchanged table).
 
-**Phase 2/3:** Q11+ per ROADMAP; ESEng (11)/CL (14) for econ/legal.
+**Phase 2 Econ (Q11-15):**
+| # | Sprint | Lead | Status | Prereqs | RACI |
+|---|--------|------|--------|---------|------|
+| Q11 | Credits | ESEng (11) | ⚪ | Q10 | TA/MA C |
+| Q12 | Patronage | ESEng (11) | ⚪ | Q11 | MA R |
+| Q13 | Trust | CS (06) | ⚪ | Q12 | SL C |
+| Q14 | Council | VA (10) | ⚪ | Q13 | CL C |
+| Q15 | Royalties | ESEng (11) | ⚪ | Q14 | SL R |
 
-**Ceremonies:** Guild Sync Fri; Handoff Ritual; TL orchestrate parallels.
+**Phase 3 Fed (Q16-20):** Bridges/Communities/etc. (prior Phase 2 epics).
 
-*Updated: 15-role RACI; BDS/VA/ESEng slots; advisory C/I financial/legal.*
+**Ceremonies:** (unchanged)
 
+*Shifted Q11-15 to Econ; Fed Q16+.*
