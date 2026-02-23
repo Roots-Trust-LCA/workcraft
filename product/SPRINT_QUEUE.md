@@ -1,35 +1,55 @@
 # Workcraft Sprint Queue
 
 **Product:** World of Workcraft  
-**Sprint Cadence:** 2-week sprints  
+**Planning Model:** Dependency-driven (not time-based)  
 **Current Sprint:** Sprint 1 (Planning)  
 **Product Owner:** Product Engineer (TIO)  
 **Technical Lead:** [TBD]
+
+## Planning Model
+
+**Approach:** Sprints are ordered by functional dependencies, not calendar dates.
+
+**Why:** Agent-driven development has different constraints than human labor:
+- Near-unlimited parallel capacity
+- Zero context-switching cost
+- Constraints are: API limits, compute resources, data availability, dependency order
+
+**Sprint Triggers:**
+- Sprint N starts when Sprint N-1 is complete (prerequisites met)
+- Sprint completes when all deliverables meet Definition of Done
+- Release deploys when all sprints in phase are complete + readiness criteria met
+
+**See:** [TIO Procedure 001 — Dependency-Driven Planning](../../tio/procedures/DEPENDENCY_DRIVEN_PLANNING.md)
 
 ---
 
 ## Sprint Queue
 
-| Queue # | Sprint | Focus | TIO Role | Status | Start Date | End Date |
-|---------|--------|-------|----------|--------|------------|----------|
-| Q1 | Sprint 1 | Schema Design + DB Setup | Schema Architect | 🟡 Planning | 2026-02-24 | 2026-03-09 |
-| Q2 | Sprint 2 | Core API Endpoints | Backend Engineer | ⚪ Backlog | 2026-03-10 | 2026-03-23 |
-| Q3 | Sprint 3 | Authentication Integration | Integration Engineer | ⚪ Backlog | 2026-03-24 | 2026-04-06 |
-| Q4 | Sprint 4 | Profile Dashboard UI | Frontend Engineer | ⚪ Backlog | 2026-04-07 | 2026-04-20 |
-| Q5 | Sprint 5 | Engagement Board UI | Frontend Engineer | ⚪ Backlog | 2026-04-21 | 2026-05-04 |
-| Q6 | Sprint 6 | Capacity Dashboard | Frontend Engineer | ⚪ Backlog | 2026-05-05 | 2026-05-18 |
-| Q7 | Sprint 7 | Contribution Verification | Workflow Engineer | ⚪ Backlog | 2026-05-19 | 2026-06-01 |
-| Q8 | Sprint 8 | Recognition System | Workflow Engineer | ⚪ Backlog | 2026-06-02 | 2026-06-15 |
-| Q9 | Sprint 9 | Load Testing + Polish | QA Engineer | ⚪ Backlog | 2026-06-16 | 2026-06-29 |
-| Q10 | Sprint 10 | Phase 1 Launch | All Roles | ⚪ Backlog | 2026-06-30 | 2026-07-13 |
+| Queue # | Sprint | Focus | TIO Role | Status | Prerequisites |
+|---------|--------|-------|----------|--------|---------------|
+| Q1 | Sprint 1 | Schema Design + DB Setup | Schema Architect | 🟡 Planning | PRD approved, database access configured |
+| Q2 | Sprint 2 | Core API Endpoints | Backend Engineer | ⚪ Backlog | Sprint 1 complete, API framework configured |
+| Q3 | Sprint 3 | Authentication Integration | Integration Engineer | ⚪ Backlog | Sprint 2 complete, co-op.us auth available |
+| Q4 | Sprint 4 | Profile Dashboard UI | Frontend Engineer | ⚪ Backlog | Sprint 3 complete, API endpoints functional |
+| Q5 | Sprint 5 | Engagement Board UI | Frontend Engineer | ⚪ Backlog | Sprint 4 complete |
+| Q6 | Sprint 6 | Capacity Dashboard | Frontend Engineer | ⚪ Backlog | Sprint 5 complete |
+| Q7 | Sprint 7 | Contribution Verification | Workflow Engineer | ⚪ Backlog | Sprint 6 complete |
+| Q8 | Sprint 8 | Recognition System | Workflow Engineer | ⚪ Backlog | Sprint 7 complete |
+| Q9 | Sprint 9 | Load Testing + Polish | QA Engineer | ⚪ Backlog | Sprints 1-8 complete, staging deployment |
+| Q10 | Sprint 10 | Phase 1 Launch | All Roles | ⚪ Backlog | Sprint 9 complete, production ready |
 
 ---
 
 ## Sprint 1: Schema Design + DB Setup
 
-**Dates:** February 24 - March 9, 2026 (2 weeks)  
+**Status:** Planning  
+**Prerequisites:** PRD approved, database access configured  
 **TIO Lead:** Schema Architect  
 **Supporting Roles:** Backend Engineer, Technical Lead
+
+**Starts:** When prerequisites met  
+**Completes:** When all deliverables meet Definition of Done
 
 ### Objectives
 1. Finalize data model for all Phase 1 epics
@@ -91,15 +111,18 @@
 - **Sprint Planning:** Feb 24, 10:00 AM MT (1 hour)
 - **Daily Standup:** Async in Telegram channel (by 10:00 AM MT)
 - **Mid-Sprint Review:** March 3, 2:00 PM MT (30 min)
-- **Sprint Review:** March 9, 2:00 PM MT (1 hour)
-- **Retrospective:** March 9, 3:00 PM MT (30 min)
+### Completion Criteria
+- [ ] All deliverables meet Definition of Done
+- [ ] Technical Lead sign-off obtained
+- [ ] Sprint review scheduled (when complete)
+- [ ] Retrospective scheduled (when complete)
 
-### Capacity Allocation
-| Role | Allocation (hours) | Team Member |
-|------|-------------------|-------------|
-| Schema Architect | 60 | [TBD] |
-| Backend Engineer | 20 | [TBD] |
-| Technical Lead | 10 | [TBD] |
+### Resource Requirements
+| Role | Estimated Compute/Resources | Team Member |
+|------|----------------------------|-------------|
+| Schema Architect | DDL generation, ER diagram rendering | [TBD] |
+| Backend Engineer | Schema validation, migration testing | [TBD] |
+| Technical Lead | Architecture review | [TBD] |
 
 ### Risks & Blockers
 - [ ] PostgreSQL version compatibility (verify co-op.us stack)
@@ -110,9 +133,13 @@
 
 ## Sprint 2: Core API Endpoints
 
-**Dates:** March 10 - March 23, 2026  
+**Status:** Backlog  
+**Prerequisites:** Sprint 1 complete, API framework configured  
 **TIO Lead:** Backend Engineer  
 **Supporting Roles:** Schema Architect, QA Engineer
+
+**Starts:** When prerequisites met  
+**Completes:** When all deliverables meet Definition of Done
 
 ### Objectives
 1. Implement REST API for all Phase 1 entities
@@ -166,27 +193,30 @@
 - [ ] API documentation is complete and accurate
 - [ ] Postman collection tested against all endpoints
 
-### Sprint Ceremonies
-- **Sprint Planning:** March 10, 10:00 AM MT
-- **Daily Standup:** Async (by 10:00 AM MT)
-- **Mid-Sprint Review:** March 17, 2:00 PM MT
-- **Sprint Review:** March 23, 2:00 PM MT
-- **Retrospective:** March 23, 3:00 PM MT
+### Completion Criteria
+- [ ] All deliverables meet Definition of Done
+- [ ] Technical Lead sign-off obtained
+- [ ] Sprint review scheduled (when complete)
+- [ ] Retrospective scheduled (when complete)
 
-### Capacity Allocation
-| Role | Allocation (hours) | Team Member |
-|------|-------------------|-------------|
-| Backend Engineer | 60 | [TBD] |
-| Schema Architect | 10 | [TBD] |
-| QA Engineer | 20 | [TBD] |
+### Resource Requirements
+| Role | Estimated Compute/Resources | Team Member |
+|------|----------------------------|-------------|
+| Backend Engineer | API implementation, test execution | [TBD] |
+| Schema Architect | Schema consultation | [TBD] |
+| QA Engineer | Test review, coverage analysis | [TBD] |
 
 ---
 
 ## Sprint 3: Authentication Integration
 
-**Dates:** March 24 - April 6, 2026  
+**Status:** Backlog  
+**Prerequisites:** Sprint 2 complete, co-op.us auth available  
 **TIO Lead:** Integration Engineer  
 **Supporting Roles:** Backend Engineer, Security Engineer
+
+**Starts:** When prerequisites met  
+**Completes:** When all deliverables meet Definition of Done
 
 ### Objectives
 1. Integrate with co-op.us authentication system
@@ -228,48 +258,62 @@
 - [ ] Audit logs capture all required events
 - [ ] Security review passes with no critical issues
 
-### Capacity Allocation
-| Role | Allocation (hours) | Team Member |
-|------|-------------------|-------------|
-| Integration Engineer | 60 | [TBD] |
-| Backend Engineer | 20 | [TBD] |
-| Compliance & Security | 20 | [TBD] |
+### Resource Requirements
+| Role | Estimated Compute/Resources | Team Member |
+|------|----------------------------|-------------|
+| Integration Engineer | Auth integration, RBAC implementation | [TBD] |
+| Backend Engineer | API support, endpoint updates | [TBD] |
+| Compliance & Security | Security review, audit log verification | [TBD] |
 
 ---
 
 ## Future Sprints (Summaries)
 
 ### Sprint 4: Profile Dashboard UI
+**Status:** Backlog  
+**Prerequisites:** Sprint 3 complete  
 **Focus:** Professional profile creation, expertise selection, journey timeline  
 **TIO Lead:** Frontend Engineer  
 **Key Deliverables:** Profile creation flow, expertise selector, journey timeline view
 
 ### Sprint 5: Engagement Board UI
+**Status:** Backlog  
+**Prerequisites:** Sprint 4 complete  
 **Focus:** Engagement discovery, claiming, lifecycle management  
 **TIO Lead:** Frontend Engineer  
 **Key Deliverables:** Engagement board with filters, claim flow, status transitions
 
 ### Sprint 6: Capacity Dashboard
+**Status:** Backlog  
+**Prerequisites:** Sprint 5 complete  
 **Focus:** Capacity visibility, allocation tracking, recovery bonus  
 **TIO Lead:** Frontend Engineer  
 **Key Deliverables:** Capacity dashboard, utilization charts, over-allocation warnings
 
 ### Sprint 7: Contribution Verification
+**Status:** Backlog  
+**Prerequisites:** Sprint 6 complete  
 **Focus:** Contribution submission, verification workflows, auto-verification  
 **TIO Lead:** Workflow Engineer  
 **Key Deliverables:** Contribution form, verification UI, auto-verification logic
 
 ### Sprint 8: Recognition System
+**Status:** Backlog  
+**Prerequisites:** Sprint 7 complete  
 **Focus:** Recognition calculation, level visibility, milestone notifications  
 **TIO Lead:** Workflow Engineer  
 **Key Deliverables:** Recognition calculation engine, level badges, notifications
 
 ### Sprint 9: Load Testing + Polish
+**Status:** Backlog  
+**Prerequisites:** Sprints 1-8 complete, staging deployment  
 **Focus:** Performance optimization, bug fixes, UX polish  
 **TIO Lead:** QA Engineer  
 **Key Deliverables:** Load test results, bug fixes, UX improvements
 
 ### Sprint 10: Phase 1 Launch
+**Status:** Backlog  
+**Prerequisites:** Sprint 9 complete, production ready  
 **Focus:** Production deployment, onboarding, monitoring  
 **TIO Lead:** All Roles  
 **Key Deliverables:** Production deployment, onboarding flow, monitoring dashboards
@@ -278,31 +322,39 @@
 
 ## Sprint Ceremonies Template
 
-### Sprint Planning (2 hours)
+**Note:** Ceremonies are triggered by sprint completion, not scheduled on fixed dates.
+
+### Sprint Planning
+**Trigger:** Previous sprint complete, prerequisites met  
+**Duration:** 2 hours (or until complete)  
 **Attendees:** Product Engineer, Technical Lead, All TIO Roles for sprint  
 **Agenda:**
 1. Review sprint goals (15 min)
 2. Walk through user stories (45 min)
-3. Capacity allocation (30 min)
+3. Resource allocation (30 min)
 4. Risk identification (30 min)
 
 ### Daily Standup (Async)
 **Channel:** Telegram #workcraft-standup  
 **Format:**
 ```
-Yesterday: [What I did]
-Today: [What I'm doing]
+Completed: [What I completed]
+Next: [What I'm working on]
 Blockers: [Any blockers]
 ```
 
-### Sprint Review (1 hour)
+### Sprint Review
+**Trigger:** All sprint deliverables complete  
+**Duration:** 1 hour (or until complete)  
 **Attendees:** Product Engineer, Technical Lead, Stakeholders  
 **Agenda:**
 1. Demo completed work (30 min)
 2. Review metrics (15 min)
 3. Stakeholder feedback (15 min)
 
-### Retrospective (30 min)
+### Retrospective
+**Trigger:** Sprint review complete  
+**Duration:** 30 min (or until complete)  
 **Attendees:** All sprint participants  
 **Agenda:**
 1. What went well? (10 min)

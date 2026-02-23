@@ -32,10 +32,27 @@ Credit system, patronage integration, Digital Infrastructure Trust, federation g
 
 ---
 
-## Phase 1: Foundation (Months 1-3)
+## Planning Model
+
+**Approach:** Dependency-driven planning (not time-based)
+
+**Why:** Agent-driven development has different constraints than human labor:
+- Near-unlimited parallel capacity
+- Zero context-switching cost
+- Constraints are: API limits, compute, data availability, dependency order
+
+**Release Triggers:** Features + readiness criteria (not calendar dates)
+
+See: [TIO Procedure 001 — Dependency-Driven Planning](../../tio/procedures/DEPENDENCY_DRIVEN_PLANNING.md)
+
+---
+
+## Phase 1: Foundation
 
 ### Objective
 Deploy core coordination infrastructure for single-node deployment with professional profile system, engagement tracking, capacity management, contribution ledger, and recognition levels.
+
+**Completion Trigger:** All epics complete + 100% organizer onboarding
 
 ### Key Results
 - ✅ 100% of Techne organizers have professional profiles
@@ -122,10 +139,12 @@ Deploy core coordination infrastructure for single-node deployment with professi
 
 ---
 
-## Phase 2: Federation (Months 4-9)
+## Phase 2: Federation
 
 ### Objective
 Enable multi-node coordination with practice communities, bilateral bridges, and cross-node contribution tracking.
+
+**Completion Trigger:** Phase 1 stable + 2nd node operational + bridge covenant signed
 
 ### Key Results
 - ✅ 3+ nodes operating in federation
@@ -192,10 +211,12 @@ Enable multi-node coordination with practice communities, bilateral bridges, and
 
 ---
 
-## Phase 3: Economic Infrastructure (Months 10+)
+## Phase 3: Economic Infrastructure
 
 ### Objective
 Deploy full economic infrastructure with credit system, patronage integration, and federation governance.
+
+**Completion Trigger:** Phase 2 stable + 5+ nodes + legal entity (DIT) incorporated
 
 ### Key Results
 - ✅ $CLOUD credit system operational
@@ -203,6 +224,7 @@ Deploy full economic infrastructure with credit system, patronage integration, a
 - ✅ Digital Infrastructure Trust incorporated
 - ✅ Federation Council meeting quarterly
 - ✅ 5+ nodes with economic integration
+- ✅ Royalty system operational (shared asset revenue share)
 
 ### Epics
 
@@ -262,18 +284,46 @@ Deploy full economic infrastructure with credit system, patronage integration, a
 - Decision protocols functional
 - Vetoes respected
 
+#### EPIC-024: Royalties & Revenue Share
+**Stories:**
+- [ ] ROY-001: Asset registration (shared IP, code, content, designs)
+- [ ] ROY-002: Contribution-to-royalty mapping (link contributions to assets)
+- [ ] ROY-003: Revenue event recording (license fees, sales, subscriptions)
+- [ ] ROY-004: Royalty formula configuration (per-asset or per-category)
+- [ ] ROY-005: Automatic royalty calculation (per revenue event)
+- [ ] ROY-006: Royalty distribution workflow (to contributor accounts)
+- [ ] ROY-007: Royalty history explorer (per asset, per contributor)
+- [ ] ROY-008: Multi-tier royalty splits (primary/secondary contributors)
+- [ ] ROY-009: Royalty covenant template (for cross-node asset sharing)
+- [ ] ROY-010: Royalty dashboard (earnings, pending, distributed)
+
+**Acceptance Criteria:**
+- Asset registration completes in <5 minutes
+- Royalty calculation triggers automatically on revenue event
+- Distribution completes within 24 hours of calculation
+- Contributors can view expected vs. received royalties
+- Cross-node royalty covenants enforceable via bridge protocol
+- Aligns with co-op.us/app/progress economic layer (Evolution 3)
+
+**Dependencies:**
+- EPIC-004 (Contribution Ledger) — requires verified contributions
+- EPIC-020 (Credit System) — distributes to credit accounts
+- EPIC-021 (Patronage Integration) — parallel allocation system
+
 ---
 
 ## Prioritization Framework
 
 ### RICE Scoring
 
-**Reach:** How many users affected in given period?  
+**Reach:** How many users affected?  
 **Impact:** How much does this move the needle? (0.25-3x)  
 **Confidence:** How sure are we? (50-100%)  
-**Effort:** Person-months to complete
+**Effort:** Compute/resource units (API calls, compute hours, storage)
 
 **Priority Score = (Reach × Impact × Confidence) / Effort**
+
+**Note:** "Effort" for agent-driven development measures resource consumption, not time. A task requiring 1000 API calls at 10/minute has effort = 100 call-minutes, regardless of wall-clock time.
 
 ### Phase 1 Priorities (Top 5)
 
@@ -299,33 +349,39 @@ EPIC-022 (Trust) → EPIC-023 (Federation Council)
 
 ## Release Schedule
 
-### Release 1.0 (Month 1)
-**MVP:** Professional profiles + Engagement board  
+**Note:** Releases are triggered by feature completion and readiness criteria, not calendar dates.
+
+### Release 1.0 (MVP)
+**Trigger:** Phase 1 epics 1-2 complete + staging deployment verified  
 **Features:** PROF-001-003, ENG-001-002
 
-### Release 1.1 (Month 2)
-**MVP:** Capacity dashboard + Contribution submission  
+### Release 1.1
+**Trigger:** Release 1.0 stable + Phase 1 epics 3-4 complete  
 **Features:** CAP-001-003, CONT-001-002
 
-### Release 1.2 (Month 3)
-**MVP:** Recognition levels + Verification workflows  
+### Release 1.2
+**Trigger:** Release 1.1 stable + Phase 1 epic 5 complete + organizer onboarding complete  
 **Features:** REC-001-004, CONT-003-007, CAP-004-007
 
-### Release 2.0 (Month 6)
-**MVP:** Practice communities + Node bridges  
+### Release 2.0 (Federation)
+**Trigger:** Release 1.2 stable + 2nd node operational + bridge covenant signed  
 **Features:** PC-001-006, BRIDGE-001-006
 
-### Release 2.1 (Month 9)
-**MVP:** Cross-node contributions + Domain expertise  
+### Release 2.1
+**Trigger:** Release 2.0 stable + cross-node contribution tracking verified  
 **Features:** CNC-001-005, EXP-001-005
 
-### Release 3.0 (Month 12)
-**MVP:** Credit system + Patronage integration  
+### Release 3.0 (Economic Infrastructure)
+**Trigger:** Release 2.1 stable + 5+ nodes + legal entity (DIT) incorporated  
 **Features:** CREDIT-001-006, PAT-001-006
 
-### Release 3.1 (Month 15)
-**MVP:** Digital Infrastructure Trust + Federation Council  
+### Release 3.1
+**Trigger:** Release 3.0 stable + Trust services operational + Federation Council seated  
 **Features:** TRUST-001-006, FED-001-006
+
+### Release 3.2 (Royalties)
+**Trigger:** Release 3.1 stable + revenue event tracking configured + first asset registered  
+**Features:** ROY-001-010
 
 ---
 

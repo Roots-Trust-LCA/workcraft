@@ -54,7 +54,7 @@ World of Workcraft (WoWc) is a **distributed coordination infrastructure** that 
 
 ## 2. Product Scope
 
-### 2.1 In Scope (Phase 1: Months 1-3)
+### 2.1 In Scope (Phase 1: Foundation)
 
 **Foundation Capabilities:**
 1. **Professional Profile System** — Primary × Secondary function (64 profiles)
@@ -69,7 +69,9 @@ World of Workcraft (WoWc) is a **distributed coordination infrastructure** that 
 - React dashboard components for capacity, engagements, contributions
 - Integration with existing co-op.us authentication and member system
 
-### 2.2 In Scope (Phase 2: Months 4-9)
+**Completion Trigger:** All epics complete + 100% organizer onboarding
+
+### 2.2 In Scope (Phase 2: Federation)
 
 **Federation Capabilities:**
 1. **Practice Communities** — Global professional communities by function
@@ -77,13 +79,17 @@ World of Workcraft (WoWc) is a **distributed coordination infrastructure** that 
 3. **Domain Expertise** — Specialization paths (6 per professional profile)
 4. **Cross-Node Contribution Tracking** — Portable contribution record
 
-### 2.3 In Scope (Phase 3: Months 10+)
+**Completion Trigger:** Phase 1 stable + 2nd node operational + bridge covenant signed
+
+### 2.3 In Scope (Phase 3: Economic Infrastructure)
 
 **Economic Infrastructure:**
 1. **Credit System** — Internal value exchange ($CLOUD)
 2. **Patronage Integration** — Contribution-to-allocation bridge
 3. **Digital Infrastructure Trust** — Cooperative data infrastructure
 4. **Federation Council** — Ecosystem governance
+
+**Completion Trigger:** Phase 2 stable + 5+ nodes + legal entity (DIT) incorporated
 
 ### 2.4 Out of Scope (Phase 1)
 
