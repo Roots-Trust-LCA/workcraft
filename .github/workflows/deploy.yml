@@ -31,6 +31,8 @@ jobs:
       VITE_AGING_ALERT_DAYS: "14"
       VITE_HUMAN_REVIEW_DEFAULT: "true"
       VITE_REQUIRE_AUTH_TO_WRITE: "false"
+      # Custom domain — build at root path instead of /workcraft/
+      VITE_BASE: "/"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -42,6 +44,8 @@ jobs:
       # SPA fallback — GitHub Pages has no server-side rewrites, so serve
       # index.html for every unknown path.
       - run: cp dist/index.html dist/404.html
+      # Custom domain — tell GitHub Pages which domain to serve from.
+      - run: echo "workcraft.xyz" > dist/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
