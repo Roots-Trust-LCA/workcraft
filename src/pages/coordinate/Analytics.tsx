@@ -14,6 +14,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, RefreshCw, CheckCircle2, Clock, Users, Zap } from 'lucide-react'
 import { WORK_TYPE_LABELS } from './constants'
+import { useWorkshop } from '../../lib/workshop-context'
 import * as d3 from 'd3'
 
 
@@ -593,6 +594,7 @@ function HeatmapChart({ data }: { data: HeatCell[] }) {
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function Analytics() {
+  const { supabase } = useWorkshop()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)

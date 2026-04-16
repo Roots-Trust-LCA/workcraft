@@ -11,6 +11,7 @@ import Avatar from '../../components/Avatar'
 import type { CoordinationProposal } from '../../types/coordination'
 import { CRAFT_SYMBOLS, CRAFT_COLORS, timeAgo } from './constants'
 import { CapacitySparkline } from '../../components/CapacitySparkline'
+import { useWorkshop } from '../../lib/workshop-context'
 
 
 interface CraftPresenceGridProps {
@@ -21,7 +22,8 @@ interface CraftPresenceGridProps {
 const AGENT_PAGE_SIZE = 8
 
 export function CraftPresenceGrid({ presence, sprints }: CraftPresenceGridProps) {
-const navigate = useNavigate()
+  const { supabase } = useWorkshop()
+  const navigate = useNavigate()
   const [agentPage, setAgentPage] = useState(0)
   const [capacityHistory, setCapacityHistory] = useState<Record<string, Array<{ timestamp: string; capacity: number }>>>({})
 
