@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { X, ExternalLink, Calendar, Tag, Link as LinkIcon, Flame } from 'lucide-react'
 import { Card, CardHeader, CardBody } from './ui/Card'
 import { Button } from './Button'
+import { useWorkshop } from '../lib/workshop-context'
 import { NODE_TYPE_METADATA, type NodeType } from '../types/graph-taxonomy'
 import { EDGE_TYPE_METADATA, type EdgeType } from '../types/edge-types'
 import { logger } from '../lib/logger'
@@ -30,6 +31,7 @@ interface NodeDetailSidebarProps {
 }
 
 export function NodeDetailSidebar({ node, onClose, onNodeClick, onThreadClick }: NodeDetailSidebarProps) {
+  const { supabase } = useWorkshop()
   const [coordinating, setCoordinating] = useState(false)
   const [coordinated, setCoordinated] = useState(false)
   const [coordCount, setCoordCount] = useState(0)

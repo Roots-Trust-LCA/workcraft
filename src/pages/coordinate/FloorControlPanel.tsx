@@ -10,6 +10,7 @@ import {
   ChevronDown,
 } from 'lucide-react'
 import { CRAFT_SYMBOLS, PHASES, SIGNAL_ICONS, timeAgo } from './constants'
+import { useWorkshop } from '../../lib/workshop-context'
 
 
 interface FloorControlPanelProps {
@@ -21,7 +22,8 @@ interface FloorControlPanelProps {
 }
 
 export function FloorControlPanel({ floor, signals, presence, workshopChannelId, onFloorReload }: FloorControlPanelProps) {
-const [floorLoading, setFloorLoading] = useState<string | null>(null)
+const { supabase } = useWorkshop()
+  const [floorLoading, setFloorLoading] = useState<string | null>(null)
 
   // Auto-expand when floor was recently active (within 30 min)
   const updatedAt = floor?.updated_at

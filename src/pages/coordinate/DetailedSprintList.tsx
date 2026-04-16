@@ -3,6 +3,7 @@ import type { CoordinationProposal } from '../../types/coordination'
 /** P234: Extracted from SprintTabs.tsx */
 
 import React from 'react'
+import { useWorkshop } from '../../lib/workshop-context'
 import {
   ChevronDown, ChevronUp, Circle, Pause, FileText, CheckCircle, Pin, Clock,
 } from 'lucide-react'
@@ -25,6 +26,7 @@ export function DetailedSprintList({
   onNavigate: (id: string) => void; now: number;
   onPinnedReload?: () => void; onSprintsReload?: () => void;
 }) {
+  const { supabase } = useWorkshop()
   return (
     <div className="space-y-5">
       {sprints.map((s: unknown, idx: number) => {

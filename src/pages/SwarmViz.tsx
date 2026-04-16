@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as d3 from 'd3'
 import ProtocolActivityStream from '../components/ProtocolActivityStream'
+import { useWorkshop } from '../lib/workshop-context'
 import { TimelineSlider } from '../components/TimelineSlider'
 import { formatDuration, computeSprintDurations } from '../utils/duration'
 import {
@@ -23,7 +24,8 @@ import SwarmLegend from './swarm-viz/SwarmLegend'
 import SwarmControls from './swarm-viz/SwarmControls'
 
 export function SwarmViz() {
-const navigate = useNavigate()
+const { supabase } = useWorkshop()
+  const navigate = useNavigate()
   const svgRef = useRef<SVGSVGElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const particlesRef = useRef<Particle[]>([])

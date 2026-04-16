@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react'
 import { MessageSquare, Hash } from 'lucide-react'
 import { GuildChat } from './GuildChat'
 import { WorkshopChat } from './WorkshopChat'
+import { useWorkshop } from '../lib/workshop-context'
 
 /**
  * Tabbed container: "Guild Chat" (existing per-craft feed) + "Workshop" (multi-party channel)
  * Auth-gated: only shown to signed-in users.
  */
 export function GuildChatTabs() {
+  const { supabase } = useWorkshop()
   const [tab, setTab] = useState<'guild' | 'workshop' | 'coordination'>('workshop')
   const [authed, setAuthed] = useState<boolean | null>(null)
 

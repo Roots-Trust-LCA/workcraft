@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Send, Bot, Hash, Loader, MessageSquare, AlertTriangle } from 'lucide-react'
 import { logger } from '../lib/logger'
+import { useWorkshop } from '../lib/workshop-context'
 
 interface GuildMessage {
   id: string
@@ -36,6 +37,7 @@ interface WorkshopChatProps {
  * Accepts an optional channelName prop (default: 'workshop').
  */
 export function WorkshopChat({ channelName = 'workshop' }: WorkshopChatProps) {
+  const { supabase } = useWorkshop()
   const [session, setSession] = useState<any>(null)
   const [channelId, setChannelId] = useState<string | null>(null)
   const [messages, setMessages] = useState<(GuildMessage | OptimisticMessage)[]>([])

@@ -17,6 +17,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { CoordinationProposal } from '../types/coordination'
 import { logger } from '../lib/logger'
+import { useWorkshop } from '../lib/workshop-context'
 import {
   Radio, Activity, FileText, ShieldCheck, ShieldAlert, Settings2, BarChart2, PlusCircle, AlertTriangle,
 } from 'lucide-react'
@@ -37,7 +38,8 @@ import { deriveConsensusHash, timeAgo } from './coordinate/constants'
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function Coordinate() {
-const navigate = useNavigate()
+const { supabase } = useWorkshop()
+  const navigate = useNavigate()
   const [advancedMode, toggleAdvanced] = useAdvancedMode()
 
   // ── Data state ────────────────────────────────────────────────────────────

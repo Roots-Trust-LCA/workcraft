@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { logger } from '../lib/logger'
 import { Handshake } from 'lucide-react'
+import { useWorkshop } from '../lib/workshop-context'
 
 interface Props {
   artifactId: string
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function CoordinateButton({ artifactId, compact = false }: Props) {
+  const { supabase } = useWorkshop()
   const [interested, setInterested] = useState(false)
   const [count, setCount] = useState(0)
   const [loading, setLoading] = useState(false)

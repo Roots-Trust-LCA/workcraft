@@ -2,6 +2,7 @@
 /** P239: Human Sprint Proposal UI — modal form for proposing sprints */
 import { useState } from 'react'
 import { X, Send, Layers, AlertCircle } from 'lucide-react'
+import { useWorkshop } from '../../lib/workshop-context'
 
 
 const COMPLEXITY_OPTIONS = ['XS', 'S', 'M', 'L', 'XL'] as const
@@ -26,7 +27,8 @@ interface ProposeSprintModalProps {
 }
 
 export function ProposeSprintModal({ open, onClose, onProposed, workshopChannelId }: ProposeSprintModalProps) {
-const [title, setTitle] = useState('')
+const { supabase } = useWorkshop()
+  const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [complexity, setComplexity] = useState<string>('S')
   const [layers, setLayers] = useState<number[]>([])

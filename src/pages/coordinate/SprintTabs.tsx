@@ -24,6 +24,7 @@ import { BarChart2, Clock } from 'lucide-react'
 import { CompactSprintGrid } from './CompactSprintGrid'
 import { DetailedSprintList } from './DetailedSprintList'
 import { ProtocolStreamTab } from './ProtocolStreamTab'
+import { useWorkshop } from '../../lib/workshop-context'
 
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -68,7 +69,8 @@ export function SprintTabs({
   onPinnedReload, onSprintsReload, onSelectProtocolEvent,
   advancedMode = false,
 }: SprintTabsProps) {
-const navigate = useNavigate()
+const { supabase } = useWorkshop()
+  const navigate = useNavigate()
 
   // Tab state
   const [activeTab, setActiveTab] = useState<'pinned' | 'sprints' | 'completed' | 'protocol' | 'timing'>('sprints')

@@ -9,13 +9,15 @@ import { useNavigate } from 'react-router-dom'
 import { MessageSquare, Bot, Users, SmilePlus } from 'lucide-react'
 import type { CoordinationProposal } from '../../types/coordination'
 import { timeAgo } from './constants'
+import { useWorkshop } from '../../lib/workshop-context'
 
 
 const REACTION_PRESETS = ['👍', '🤔', '✅', '🚀', '👀']
 
 /** P240: Inline reaction bar for a single message */
 function MessageReactions({ messageId }: { messageId: string }) {
-const [reactions, setReactions] = useState<Record<string, number>>({})
+const { supabase } = useWorkshop()
+  const [reactions, setReactions] = useState<Record<string, number>>({})
   const [myReactions, setMyReactions] = useState<Set<string>>(new Set())
   const [showPicker, setShowPicker] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -146,6 +148,7 @@ interface WorkshopActivityProps {
 const ACTIVITY_PAGE_SIZE = 6
 
 export function WorkshopActivity({ activity, sprints, completedSprints, workshopChannelId, onSelectMessage }: WorkshopActivityProps) {
+  const { supabase } = useWorkshop()
   const navigate = useNavigate()
   const [activityPage, setActivityPage] = useState(0)
   const [composeTitle, setComposeTitle] = useState('')

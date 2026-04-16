@@ -18,6 +18,7 @@ import { logger } from '../lib/logger'
 import { timeAgo } from '../lib/format'
 import { BottomSheet } from '../components/BottomSheet'
 import { colors } from '../styles/tokens'
+import { useWorkshop } from '../lib/workshop-context'
 
 import {
   CRAFT_SYMBOLS, CRAFT_COLORS, STATUS_COLORS, LAYER_COLORS,
@@ -48,7 +49,8 @@ const pulseStyles = `
 `
 
 export function SwarmLive() {
-const navigate = useNavigate()
+const { supabase } = useWorkshop()
+  const navigate = useNavigate()
   const svgRef = useRef<SVGSVGElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const particlesRef = useRef<Particle[]>([])

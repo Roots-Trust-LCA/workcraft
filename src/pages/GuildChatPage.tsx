@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Send, Bot, Hash, Loader, MessageSquare } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
+import { useWorkshop } from '../lib/workshop-context'
 
 
 interface GuildChannel {
@@ -35,7 +36,8 @@ interface OptimisticMessage {
 }
 
 export function GuildChatPage() {
-const navigate = useNavigate()
+const { supabase } = useWorkshop()
+  const navigate = useNavigate()
   const [session, setSession] = useState<Session | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [channels, setChannels] = useState<GuildChannel[]>([])

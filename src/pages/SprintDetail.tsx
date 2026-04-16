@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { logger } from '../lib/logger'
+import { useWorkshop } from '../lib/workshop-context'
 import {
   ArrowLeft, CheckCircle, Circle, Pause,
   FileText, Clock, Pin, PinOff, AlertTriangle,
@@ -19,7 +20,8 @@ import { SprintProtocolLog } from './sprint-detail/SprintProtocolLog'
 import { SprintProgressPanel } from './sprint-detail/SprintProgressPanel'
 
 export function SprintDetail() {
-const { id } = useParams<{ id: string }>()
+const { supabase } = useWorkshop()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [sprint, setSprint] = useState<any>(null)
   const [discussion, setDiscussion] = useState<any[]>([])

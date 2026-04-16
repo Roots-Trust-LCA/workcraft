@@ -1,8 +1,10 @@
 // @ts-nocheck
 import { useState, useEffect, useRef } from 'react'
 import { Send, User, Loader } from 'lucide-react'
+import { useWorkshop } from '../lib/workshop-context'
 
 export function GuildChat() {
+  const { supabase } = useWorkshop()
   const [session, setSession] = useState<any>(null)
   const [messages, setMessages] = useState<any[]>([])
   const [newMessage, setNewMessage] = useState('')
