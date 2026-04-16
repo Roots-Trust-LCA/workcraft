@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/**
+ * Workshop — standalone base styles.
+ * Dark mode by default. Uses Tailwind v4 @theme to map `co-*` color classes
+ * (bg-co-bg, text-co-primary, border-co-border, etc.) to the original
+ * co-op.us palette so the extracted components render unchanged.
+ *
+ * To rebrand a deployment, override the @theme values below or set them
+ * via CSS custom properties at runtime on :root.
+ */
+
+@theme {
+  /* Primary brand (warm terracotta) */
+  --color-co-primary: #c4956a;
+  --color-co-primary-hover: #d4a57a;
+  --color-co-primary-muted: rgba(196, 149, 106, 0.15);
+
+  /* Surfaces (dark mode default) */
+  --color-co-bg: #0a0a0f;
+  --color-co-surface: #141420;
+  --color-co-surface-hover: #1c1c2e;
+  --color-co-surface-active: #252538;
+  --color-co-overlay: rgba(10, 10, 15, 0.85);
+
+  /* Borders */
+  --color-co-border: #2a2a3e;
+  --color-co-border-hover: #3a3a4e;
+
+  /* Text */
+  --color-co-text: #e8e8f0;
+  --color-co-text-secondary: #a0a0b8;
+  --color-co-text-muted: #6a6a82;
+  --color-co-text-placeholder: #4a4a62;
+
+  /* Nav */
+  --color-co-nav-bg: #0c0c14;
+
+  /* Semantic / status */
+  --color-co-success: #6ad19f;
+  --color-co-warning: #e6b96a;
+  --color-co-danger: #e07070;
+  --color-co-info: #8bbfff;
+
+  /* Typography */
+  --font-mono-plex: "IBM Plex Mono", ui-monospace, monospace;
+  --font-serif-cormorant: "Cormorant", Georgia, serif;
+}
+
+:root {
+  /* Also expose as plain CSS custom properties so non-Tailwind inline styles
+     that reference `var(--co-*)` continue to work. */
+  --co-primary: var(--color-co-primary);
+  --co-primary-hover: var(--color-co-primary-hover);
+  --co-bg: var(--color-co-bg);
+  --co-surface: var(--color-co-surface);
+  --co-surface-hover: var(--color-co-surface-hover);
+  --co-border: var(--color-co-border);
+  --co-border-hover: var(--color-co-border-hover);
+  --co-text: var(--color-co-text);
+  --co-text-secondary: var(--color-co-text-secondary);
+  --co-text-muted: var(--color-co-text-muted);
+  --co-text-placeholder: var(--color-co-text-placeholder);
+  --co-nav-bg: var(--color-co-nav-bg);
+  --co-success: var(--color-co-success);
+  --co-warning: var(--color-co-warning);
+  --co-danger: var(--color-co-danger);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--color-co-bg);
+  color: var(--color-co-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--color-co-info); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-co-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-co-border-hover); }
+
+/* Font utility classes referenced throughout the codebase */
+.font-mono-plex { font-family: var(--font-mono-plex); }
+.font-serif-cormorant { font-family: var(--font-serif-cormorant); }

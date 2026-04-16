@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import { logger } from '../lib/logger'
 import {
   ArrowLeft, CheckCircle, Circle, Pause,
@@ -18,11 +17,9 @@ import {
 import { SprintDiscussion } from './sprint-detail/SprintDiscussion'
 import { SprintProtocolLog } from './sprint-detail/SprintProtocolLog'
 import { SprintProgressPanel } from './sprint-detail/SprintProgressPanel'
-import { usePageTitle } from '../hooks/usePageTitle'
 
 export function SprintDetail() {
-  usePageTitle('Sprint Detail')
-  const { id } = useParams<{ id: string }>()
+const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [sprint, setSprint] = useState<any>(null)
   const [discussion, setDiscussion] = useState<any[]>([])
@@ -139,7 +136,7 @@ export function SprintDetail() {
     return (
       <div className="max-w-4xl mx-auto text-center py-16">
         <p className="text-gray-500">Sprint not found</p>
-        <button onClick={() => navigate('/')} className="text-co-primary text-sm mt-2 hover:underline">
+        <button onClick={() => navigate('/coordinate')} className="text-co-primary text-sm mt-2 hover:underline">
           Back to Workshop
         </button>
       </div>
@@ -175,7 +172,7 @@ export function SprintDetail() {
 
       {/* Back link */}
       <button
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/coordinate')}
         className="flex items-center gap-2 text-sm text-co-text-muted hover:text-co-primary transition-colors mb-4 pt-1"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -327,8 +324,7 @@ export function SprintDetail() {
               {sprint.description.length > 300 && (
                 <button
                   onClick={() => setShowFullDescription(v => !v)}
-                  className="text-xs mt-1 hover:text-co-primary transition-colors"
-                  className="font-mono-plex text-co-text-muted"
+                  className="text-xs mt-1 hover:text-co-primary transition-colors font-mono-plex text-co-text-muted"
                 >
                   {showFullDescription ? 'Show less' : 'Show more'}
                 </button>

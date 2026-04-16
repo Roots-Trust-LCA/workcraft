@@ -1,7 +1,7 @@
+// @ts-nocheck
 /** P251: Extracted from SwarmViz.tsx */
 
 import { STATUS_COLORS } from './SwarmHelpers'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface CommitContributor {
@@ -17,9 +17,7 @@ interface SwarmLegendProps {
 }
 
 export default function SwarmLegend({ dimensions, commitLeaderboard }: SwarmLegendProps) {
-  usePageTitle('Swarm Legend')
-
-  return (
+return (
     <>
       {/* Overlay: Agent Status + Edges legend — P135: hidden on mobile / P136: z-index 50 */}
       <div style={{

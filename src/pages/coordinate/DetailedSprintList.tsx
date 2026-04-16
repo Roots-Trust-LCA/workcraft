@@ -6,7 +6,6 @@ import React from 'react'
 import {
   ChevronDown, ChevronUp, Circle, Pause, FileText, CheckCircle, Pin, Clock,
 } from 'lucide-react'
-import { supabase } from '../../lib/supabase'
 import { SprintTimeline } from '../../components/SprintTimeline'
 import { formatLifecycleSummary } from '../../utils/duration'
 import {

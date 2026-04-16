@@ -14,7 +14,6 @@ import {
   extractSprintUrls, extractRepoEntities, getRepoRarity, timeAgo,
   GITHUB_REPO_RE,
 } from './constants'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface SharedLinksPanelProps {
@@ -28,9 +27,7 @@ const LINKS_PAGE_SIZE = 8
 const REPO_ROOT_RE = /^https?:\/\/github\.com\/[^/]+\/[^/]+\/?$/
 
 export function SharedLinksPanel({ links, sprints, completedSprints }: SharedLinksPanelProps) {
-  usePageTitle('Shared Links Panel')
-
-  const [reposPage, setReposPage] = useState(0)
+const [reposPage, setReposPage] = useState(0)
   const [linksPage, setLinksPage] = useState(0)
 
   // P26: Build merged links + repo entities
@@ -123,14 +120,12 @@ export function SharedLinksPanel({ links, sprints, completedSprints }: SharedLin
           {reposPages > 1 && (
             <div className="flex items-center justify-between mt-2 pt-2 border-t" >
               <button onClick={() => setReposPage(p => Math.max(0, p - 1))} disabled={reposPage === 0}
-                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                className="bg-co-surface text-co-text-muted">← Prev</button>
+                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-co-surface text-co-text-muted">← Prev</button>
               <span className="font-mono-plex text-[0.65rem] text-co-text-muted">
                 {reposPage + 1} / {reposPages}
               </span>
               <button onClick={() => setReposPage(p => Math.min(reposPages - 1, p + 1))} disabled={reposPage === reposPages - 1}
-                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                className="bg-co-surface text-co-text-muted">Next →</button>
+                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-co-surface text-co-text-muted">Next →</button>
             </div>
           )}
         </div>
@@ -173,14 +168,12 @@ export function SharedLinksPanel({ links, sprints, completedSprints }: SharedLin
           {linksPages > 1 && (
             <div className="flex items-center justify-between mt-3 pt-3 border-t" >
               <button onClick={() => setLinksPage(p => Math.max(0, p - 1))} disabled={linksPage === 0}
-                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                className="bg-co-surface text-co-text-muted">← Prev</button>
+                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-co-surface text-co-text-muted">← Prev</button>
               <span className="font-mono-plex text-[0.65rem] text-co-text-muted">
                 {linksPage + 1} / {linksPages}
               </span>
               <button onClick={() => setLinksPage(p => Math.min(linksPages - 1, p + 1))} disabled={linksPage === linksPages - 1}
-                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                className="bg-co-surface text-co-text-muted">Next →</button>
+                className="px-2.5 py-1 text-xs rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-co-surface text-co-text-muted">Next →</button>
             </div>
           )}
         </>

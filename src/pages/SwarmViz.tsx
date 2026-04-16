@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import * as d3 from 'd3'
 import ProtocolActivityStream from '../components/ProtocolActivityStream'
 import { TimelineSlider } from '../components/TimelineSlider'
@@ -11,7 +10,6 @@ import {
 } from 'lucide-react'
 import { logger } from '../lib/logger'
 import { timeAgo } from '../lib/format'
-import { usePageTitle } from '../hooks/usePageTitle'
 
 // P251: Constants, types, and helpers extracted to swarm-viz/
 import {
@@ -25,8 +23,7 @@ import SwarmLegend from './swarm-viz/SwarmLegend'
 import SwarmControls from './swarm-viz/SwarmControls'
 
 export function SwarmViz() {
-  usePageTitle('Swarm')
-  const navigate = useNavigate()
+const navigate = useNavigate()
   const svgRef = useRef<SVGSVGElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const particlesRef = useRef<Particle[]>([])
@@ -1356,7 +1353,7 @@ export function SwarmViz() {
         display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap',
       }}>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/coordinate')}
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             background: 'none', border: '1px solid var(--co-border)', borderRadius: '4px',
@@ -1376,7 +1373,7 @@ export function SwarmViz() {
 
         {/* P308: Link to Live view */}
         <button
-          onClick={() => navigate('/swarm/live')}
+          onClick={() => navigate('/coordinate/swarm/live')}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             background: '#4ade8014', border: '1px solid #4ade8055',
@@ -1905,7 +1902,7 @@ export function SwarmViz() {
                     {/* Full detail link */}
                     <div style={{ borderTop: '1px solid var(--co-border)', paddingTop: '8px' }}>
                       <button
-                        onClick={() => navigate(`/sprint/${fullSprint?.id || ''}`)}
+                        onClick={() => navigate(`/coordinate/sprint/${fullSprint?.id || ''}`)}
                         style={{
                           background: `${node.color}22`, border: `1px solid ${node.color}44`,
                           color: node.color, borderRadius: '4px', padding: '4px 10px',
@@ -2146,7 +2143,7 @@ export function SwarmViz() {
                 <div style={{ padding: '24px', textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.72rem', color: 'var(--co-text-muted)' }}>No active sprints</div>
               ) : (
                 sprints.filter((s: Record<string, unknown>) => ['in_progress', 'testing', 'proposed', 'claimed'].includes((s as string).status)).map((s: Record<string, unknown>) => (
-                  <div key={String(s.id)} onClick={() => navigate(`/sprint/${s.id}`)}
+                  <div key={String(s.id)} onClick={() => navigate(`/coordinate/sprint/${s.id}`)}
                     style={{ padding: '12px 20px', borderBottom: '1px solid var(--co-border)', cursor: 'pointer', transition: 'background 0.15s' }}
                     onMouseEnter={e => (e.currentTarget.style.background = '#141414')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>

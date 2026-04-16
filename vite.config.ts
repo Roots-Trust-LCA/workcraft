@@ -1,12 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import path from 'path'
+
+// GitHub Pages deployment: roots-trust-lca.github.io/workcraft/
+// Override with VITE_BASE=/ for root-hosted deploys (e.g., custom domain).
+const base = process.env.VITE_BASE ?? '/workcraft/'
 
 export default defineConfig({
+  base,
   plugins: [react(), tailwindcss()],
-  base: '/workcraft/',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
   build: {
-    outDir: 'dist',
     rollupOptions: {
       output: {
         manualChunks(id) {

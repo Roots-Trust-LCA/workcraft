@@ -11,8 +11,6 @@ import Avatar from '../../components/Avatar'
 import type { CoordinationProposal } from '../../types/coordination'
 import { CRAFT_SYMBOLS, CRAFT_COLORS, timeAgo } from './constants'
 import { CapacitySparkline } from '../../components/CapacitySparkline'
-import { supabase } from '../../lib/supabase'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface CraftPresenceGridProps {
@@ -23,9 +21,7 @@ interface CraftPresenceGridProps {
 const AGENT_PAGE_SIZE = 8
 
 export function CraftPresenceGrid({ presence, sprints }: CraftPresenceGridProps) {
-  usePageTitle('Craft Presence Grid')
-
-  const navigate = useNavigate()
+const navigate = useNavigate()
   const [agentPage, setAgentPage] = useState(0)
   const [capacityHistory, setCapacityHistory] = useState<Record<string, Array<{ timestamp: string; capacity: number }>>>({})
 
@@ -311,7 +307,7 @@ export function CraftPresenceGrid({ presence, sprints }: CraftPresenceGridProps)
                             borderRadius: '3px', padding: '2px 6px',
                             border: 'none', cursor: 'pointer',
                           }}
-                          onClick={(e) => { e.stopPropagation(); navigate(`/sprint/${currentSprint.id}`) }}
+                          onClick={(e) => { e.stopPropagation(); navigate(`/coordinate/sprint/${currentSprint.id}`) }}
                         >
                           ▸ {currentSprint.sprint_id || currentSprint.title?.slice(0, 30)}
                         </button>

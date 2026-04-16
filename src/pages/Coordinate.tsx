@@ -15,7 +15,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import type { CoordinationProposal } from '../types/coordination'
 import { logger } from '../lib/logger'
 import {
@@ -34,13 +33,11 @@ import { EventDetailModal } from './coordinate/EventDetailModal'
 import { MessageDetailModal } from './coordinate/MessageDetailModal'
 import { ProposeSprintModal } from './coordinate/ProposeSprintModal'
 import { deriveConsensusHash, timeAgo } from './coordinate/constants'
-import { usePageTitle } from '../hooks/usePageTitle'
 
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function Coordinate() {
-  usePageTitle('Coordinate')
-  const navigate = useNavigate()
+const navigate = useNavigate()
   const [advancedMode, toggleAdvanced] = useAdvancedMode()
 
   // ── Data state ────────────────────────────────────────────────────────────
@@ -358,7 +355,7 @@ export function Coordinate() {
         <div className="flex items-center gap-2 flex-wrap">
           {advancedMode && (
             <button
-              onClick={() => navigate('/swarm')}
+              onClick={() => navigate('/coordinate/swarm')}
               className="hidden sm:inline-flex items-center gap-2 rounded-lg transition-all min-h-[44px]"
               style={{
                 fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.85rem',
@@ -378,7 +375,7 @@ export function Coordinate() {
           {/* P304: Mobile icon-only for Swarm Viz */}
           {advancedMode && (
             <button
-              onClick={() => navigate('/swarm')}
+              onClick={() => navigate('/coordinate/swarm')}
               className="sm:hidden inline-flex items-center justify-center rounded-lg min-h-[44px] min-w-[44px]"
               style={{
                 color: 'var(--co-primary)', background: '#c4956a14',
@@ -411,7 +408,7 @@ export function Coordinate() {
 
           {/* Analytics — label on sm+, icon-only on mobile */}
           <button
-            onClick={() => navigate('/analytics')}
+            onClick={() => navigate('/coordinate/analytics')}
             className="hidden sm:inline-flex items-center gap-2 rounded-lg transition-all min-h-[44px]"
             style={{
               fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.8rem',
@@ -428,7 +425,7 @@ export function Coordinate() {
             <span style={{ fontSize: '0.7rem', color: '#c4956a88' }}>↗</span>
           </button>
           <button
-            onClick={() => navigate('/analytics')}
+            onClick={() => navigate('/coordinate/analytics')}
             className="sm:hidden inline-flex items-center justify-center rounded-lg min-h-[44px] min-w-[44px]"
             style={{
               color: 'var(--co-primary)', background: '#c4956a14',

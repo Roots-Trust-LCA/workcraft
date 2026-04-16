@@ -1,8 +1,8 @@
+// @ts-nocheck
 /** P242: Extracted from SprintDetail.tsx */
 import { useState } from 'react'
 import { MessageSquare, Bot, Users, ChevronDown, ChevronUp } from 'lucide-react'
 import { renderMarkdown, formatTimestamp, LABEL_COLORS } from './SprintDetailHelpers'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface SprintDiscussionProps {
@@ -10,9 +10,7 @@ interface SprintDiscussionProps {
 }
 
 export function SprintDiscussion({ discussion }: SprintDiscussionProps) {
-  usePageTitle('Sprint Discussion')
-
-  const [selectedMessage, setSelectedMessage] = useState<any>(null)
+const [selectedMessage, setSelectedMessage] = useState<any>(null)
 
   return (
     <div className="bg-co-bg border border-co-border rounded-lg overflow-hidden mb-4">

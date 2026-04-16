@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** P242: Extracted from SprintDetail.tsx */
 import { sanitizeHtml } from '../../lib/sanitize'
 

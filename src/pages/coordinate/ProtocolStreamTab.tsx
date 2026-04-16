@@ -132,7 +132,7 @@ export function ProtocolStreamTab({
                   <div className="flex items-center gap-2 px-3 py-2.5">
                     <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.75rem', color: testingColor, width: '8px', textAlign: 'center' }}>◈</span>
                     <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem', color: testingColor, background: testingColor + '18', borderRadius: '3px', padding: '1px 6px' }}>{label}</span>
-                    {sprintLabel && <button className="hover:text-co-text transition-colors" onClick={e => { e.stopPropagation(); if (ev.sprint_id) onNavigate(`/sprint/${(ev as any).sprint_id}`) }}>{sprintLabel}</button>}
+                    {sprintLabel && <button className="hover:text-co-text transition-colors" onClick={e => { e.stopPropagation(); if (ev.sprint_id) onNavigate(`/coordinate/sprint/${(ev as any).sprint_id}`) }}>{sprintLabel}</button>}
                     {summary && <span style={{ fontFamily: "'Source Serif 4', serif", fontSize: '0.82rem', color: 'var(--co-text-muted)' }}>{summary.replace(sprintLabel || '', '').trim()}</span>}
                     {payload.completion_proof && <a href={payload.completion_proof} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.75rem', color: testingColor }} className="hover:underline">proof ↗</a>}
                     <span className="ml-auto" >{timeAgo((ev as any).created_at)}</span>
@@ -167,7 +167,7 @@ export function ProtocolStreamTab({
                 <div className="flex items-center gap-2 px-3 pt-2.5 pb-1">
                   <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.75rem', color: color + '88', width: '8px', textAlign: 'center' }}>{catIcon}</span>
                   <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem', color, background: color + '18', borderRadius: '3px', padding: '1px 6px' }}>{label}</span>
-                  {sprintLabel && <button className="hover:text-co-text transition-colors" onClick={e => { e.stopPropagation(); if (ev.sprint_id) onNavigate(`/sprint/${(ev as any).sprint_id}`) }}>{sprintLabel}</button>}
+                  {sprintLabel && <button className="hover:text-co-text transition-colors" onClick={e => { e.stopPropagation(); if (ev.sprint_id) onNavigate(`/coordinate/sprint/${(ev as any).sprint_id}`) }}>{sprintLabel}</button>}
                   {ev.agent?.name && <button className="hover:text-co-text transition-colors truncate" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--co-text)' }} onClick={e => { e.stopPropagation(); onNavigate(`/member/${ev.agent_id}`) }}>{(ev as any).agent.name}</button>}
                   {payload.complexity && <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.75rem', color: 'var(--co-text-muted)', background: '#ffffff08', borderRadius: '2px', padding: '0 3px' }}>{payload.complexity}</span>}
                   {layers.length > 0 && (
@@ -181,7 +181,7 @@ export function ProtocolStreamTab({
                   <span className="ml-auto shrink-0" >{timeAgo((ev as any).created_at)}</span>
                 </div>
                 {summary && <div className="px-3 pb-1" ><p style={{ fontFamily: "'Source Serif 4', serif", fontSize: '0.82rem', color: 'var(--co-text-muted)', lineHeight: 1.4 }}>{summary}</p></div>}
-                {!summary && sprintTitle && <div className="px-3 pb-1" ><button style={{ fontFamily: "'Source Serif 4', serif", fontSize: '0.82rem', color: 'var(--co-text-muted)' }} onClick={e => { e.stopPropagation(); if (ev.sprint_id) onNavigate(`/sprint/${(ev as any).sprint_id}`) }}>{sprintTitle}</button></div>}
+                {!summary && sprintTitle && <div className="px-3 pb-1" ><button style={{ fontFamily: "'Source Serif 4', serif", fontSize: '0.82rem', color: 'var(--co-text-muted)' }} onClick={e => { e.stopPropagation(); if (ev.sprint_id) onNavigate(`/coordinate/sprint/${(ev as any).sprint_id}`) }}>{sprintTitle}</button></div>}
                 {(payload.message || payload.completion_proof || payload.content_preview) && (
                   <div className="px-3 pb-2" >
                     <p className="line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif", fontSize: '0.78rem', color: payload.completion_proof ? '#7ccfb8' : 'var(--co-text-muted)', lineHeight: 1.5, fontStyle: (payload.message && !payload.completion_proof) ? 'italic' : 'normal' }}>
@@ -205,12 +205,10 @@ export function ProtocolStreamTab({
       {protocolPages > 1 && (
         <div className="flex items-center justify-between mt-4 pt-3 border-t" >
           <button onClick={() => setProtocolPage(p => Math.max(0, p - 1))} disabled={protocolPage === 0}
-            className="px-3 py-1.5 text-xs rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{background: "var(--co-surface)", color: "var(--co-text-muted)"}}>← Prev</button>
+            className="px-3 py-1.5 text-xs rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-co-surface text-co-text-muted">← Prev</button>
           <span className="font-mono-plex text-[0.7rem] text-co-text-muted">{protocolPage + 1} / {protocolPages}</span>
           <button onClick={() => setProtocolPage(p => Math.min(protocolPages - 1, p + 1))} disabled={protocolPage === protocolPages - 1}
-            className="px-3 py-1.5 text-xs rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{background: "var(--co-surface)", color: "var(--co-text-muted)"}}>Next →</button>
+            className="px-3 py-1.5 text-xs rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-co-surface text-co-text-muted">Next →</button>
         </div>
       )}
     </div>

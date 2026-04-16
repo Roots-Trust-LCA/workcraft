@@ -7,7 +7,6 @@
 import { useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { EVENT_COLORS, EVENT_LABELS, timeAgo } from './constants'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface EventDetailModalProps {
@@ -16,9 +15,7 @@ interface EventDetailModalProps {
 }
 
 export function EventDetailModal({ event: ev, onClose }: EventDetailModalProps) {
-  usePageTitle('Event Detail Modal')
-
-  const navigate = useNavigate()
+const navigate = useNavigate()
   const color = EVENT_COLORS[(ev as any).event_type] || 'var(--co-text-muted)'
   const label = EVENT_LABELS[ev.event_type] || (ev as any).event_type
   const payload = (ev as any).payload || {}
@@ -43,8 +40,9 @@ export function EventDetailModal({ event: ev, onClose }: EventDetailModalProps) 
           <div className="flex-1 min-w-0">
             {(ev as any).agent?.name && (
               <button
-                className="hover:text-co-primary transition-colors font-serif-cormorant" style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--co-text)' }}
-                onClick={() => { onClose(); navigate(`/${(ev as any).agent_id}`) }}
+                className="hover:text-co-primary transition-colors"
+                className="font-serif-cormorant" style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--co-text)' }}
+                onClick={() => { onClose(); navigate(`/member/${(ev as any).agent_id}`) }}
               >
                 {(ev as any).agent.name}
               </button>
@@ -66,8 +64,9 @@ export function EventDetailModal({ event: ev, onClose }: EventDetailModalProps) 
             <div>
               <div className="ws-label-lg text-co-text-muted">Sprint</div>
               <button
-                className="flex items-center gap-2 hover:text-co-text transition-colors text-left text-co-text-muted"
-                onClick={() => { onClose(); if (ev.sprint_id) navigate(`/sprint/${(ev as any).sprint_id}`) }}
+                className="flex items-center gap-2 hover:text-co-text transition-colors text-left"
+                className="text-co-text-muted"
+                onClick={() => { onClose(); if (ev.sprint_id) navigate(`/coordinate/sprint/${(ev as any).sprint_id}`) }}
               >
                 {(ev as any).sprint.sprint_id && (
                   <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.68rem', background: '#c4956a18', color: 'var(--co-primary)', padding: '1px 6px', borderRadius: '3px' }}>

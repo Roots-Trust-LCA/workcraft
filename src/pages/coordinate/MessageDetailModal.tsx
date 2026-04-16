@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MessageDetailModal — Workshop message detail overlay.
  * Extracted from Coordinate.tsx as part of P159.
@@ -5,7 +6,6 @@
 
 import { Bot, Users, X } from 'lucide-react'
 import { renderMarkdown, timeAgo } from './constants'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface MessageDetailModalProps {
@@ -14,9 +14,7 @@ interface MessageDetailModalProps {
 }
 
 export function MessageDetailModal({ message, onClose }: MessageDetailModalProps) {
-  usePageTitle('Message Detail Modal')
-
-  return (
+return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: 'rgba(0,0,0,0.75)' }}

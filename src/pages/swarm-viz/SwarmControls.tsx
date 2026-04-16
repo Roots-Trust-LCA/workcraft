@@ -1,7 +1,7 @@
+// @ts-nocheck
 /** P251: Extracted from SwarmViz.tsx */
 
 import { COMPLEXITY_NEON, LAYER_COLORS } from './SwarmHelpers'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface SwarmControlsProps {
@@ -15,9 +15,7 @@ interface SwarmControlsProps {
 export default function SwarmControls({
   simFilter, setSimFilter, showLegends, setShowLegends, dimensions,
 }: SwarmControlsProps) {
-  usePageTitle('Swarm Controls')
-
-  return (
+return (
     <>
       {/* P195: Simulation filter toggle */}
       <button

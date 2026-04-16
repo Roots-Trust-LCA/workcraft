@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom'
 import {
   Zap, CheckCircle, Activity, Pin, PinOff,
 } from 'lucide-react'
-import { supabase } from '../../lib/supabase'
 import type { CoordinationProposal } from '../../types/coordination'
 import {
   LAYER_COLORS, STATUS_LABELS, STATUS_COLORS,
@@ -25,7 +24,6 @@ import { BarChart2, Clock } from 'lucide-react'
 import { CompactSprintGrid } from './CompactSprintGrid'
 import { DetailedSprintList } from './DetailedSprintList'
 import { ProtocolStreamTab } from './ProtocolStreamTab'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -70,9 +68,7 @@ export function SprintTabs({
   onPinnedReload, onSprintsReload, onSelectProtocolEvent,
   advancedMode = false,
 }: SprintTabsProps) {
-  usePageTitle('Sprint Tabs')
-
-  const navigate = useNavigate()
+const navigate = useNavigate()
 
   // Tab state
   const [activeTab, setActiveTab] = useState<'pinned' | 'sprints' | 'completed' | 'protocol' | 'timing'>('sprints')
@@ -212,8 +208,9 @@ export function SprintTabs({
                           <Pin className="w-3 h-3 text-[#a78bfa]" />
                         </div>
                         <div
-                          className="text-sm mb-2 cursor-pointer hover:text-co-text transition-colors font-serif-cormorant" style={{ color: 'var(--co-text)', fontSize: '0.95rem' }}
-                          onClick={() => navigate(`/sprint/${s.id}`)}
+                          className="text-sm mb-2 cursor-pointer hover:text-co-text transition-colors"
+                          className="font-serif-cormorant" style={{ color: 'var(--co-text)', fontSize: '0.95rem' }}
+                          onClick={() => navigate(`/coordinate/sprint/${s.id}`)}
                         >
                           {s.title}
                         </div>
@@ -322,14 +319,14 @@ export function SprintTabs({
               {filteredActiveSprints.length === 0 ? (
                 <p className="text-co-text-muted text-sm py-4 text-center">No sprints match the current filters</p>
               ) : compactSprints ? (
-                <CompactSprintGrid sprints={pagedSprints} onNavigate={(id) => navigate(`/sprint/${id}`)} />
+                <CompactSprintGrid sprints={pagedSprints} onNavigate={(id) => navigate(`/coordinate/sprint/${id}`)} />
               ) : (
                 <DetailedSprintList
                   sprints={pagedSprints}
                   presence={presence}
                   expanded={expanded}
                   setExpanded={setExpanded}
-                  onNavigate={(id) => navigate(`/sprint/${id}`)}
+                  onNavigate={(id) => navigate(`/coordinate/sprint/${id}`)}
                   now={now}
                   onPinnedReload={onPinnedReload}
                   onSprintsReload={onSprintsReload}
@@ -406,7 +403,7 @@ export function SprintTabs({
                   const sprintLabel = s.sprint_id || (() => { const m = s.title?.match(/^([A-Z]\d{2}[a-z]?|[A-Z]\d+)\b/); return m ? m[1] : s.id?.slice(0, 6) })()
                   const tierMeta = s.visibility_tier ? TIER_META[s.visibility_tier] : null
                   return (
-                    <div key={s.id} className="px-3 sm:px-5 py-4 hover:bg-co-surface transition-colors cursor-pointer" onClick={() => navigate(`/sprint/${s.id}`)}>
+                    <div key={s.id} className="px-3 sm:px-5 py-4 hover:bg-co-surface transition-colors cursor-pointer" onClick={() => navigate(`/coordinate/sprint/${s.id}`)}>
                       <div className="flex items-start gap-3">
                         <div className="flex items-center gap-2 shrink-0 pt-0.5">
                           <CheckCircle className="w-3.5 h-3.5" style={{ color: '#7ccfb8' }} />

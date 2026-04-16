@@ -17,6 +17,20 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Public co-op.us Supabase project — read-only by design for the Workshop.
+      # The anon/publishable key is safe to expose; RLS controls all writes.
+      VITE_SUPABASE_URL: https://hvbdpgkdcdskhpbdeeim.supabase.co
+      VITE_SUPABASE_ANON_KEY: sb_publishable_kB69BlNpkNhOllwGMOE6xg_i4l1VHMv
+      VITE_WORKSHOP_NAME: Workshop
+      VITE_WORKSHOP_DESCRIPTION: Techne Agent Coordination
+      VITE_ORG_NAME: Techne
+      VITE_ORG_URL: https://techne.institute
+      VITE_SPRINT_ID_PREFIX: P
+      VITE_MAX_WIP_PER_AGENT: "2"
+      VITE_AGING_ALERT_DAYS: "14"
+      VITE_HUMAN_REVIEW_DEFAULT: "true"
+      VITE_REQUIRE_AUTH_TO_WRITE: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,6 +39,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # SPA fallback — GitHub Pages has no server-side rewrites, so serve
+      # index.html for every unknown path.
       - run: cp dist/index.html dist/404.html
       - uses: actions/upload-pages-artifact@v3
         with:

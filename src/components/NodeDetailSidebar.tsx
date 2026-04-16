@@ -1,0 +1,317 @@
+// @ts-nocheck
+import { useState, useEffect } from 'react'
+import { X, ExternalLink, Calendar, Tag, Link as LinkIcon, Flame } from 'lucide-react'
+import { Card, CardHeader, CardBody } from './ui/Card'
+import { Button } from './Button'
+import { NODE_TYPE_METADATA, type NodeType } from '../types/graph-taxonomy'
+import { EDGE_TYPE_METADATA, type EdgeType } from '../types/edge-types'
+import { logger } from '../lib/logger'
+
+export interface NodeData {
+  id: string
+  label: string
+  type?: NodeType
+  dimension?: string
+  dimensions?: string[]
+  tags?: string[]
+  created_at?: string
+  description?: string
+  metadata?: Record<string, unknown>
+  outgoing?: Array<{ target: string; type: EdgeType; label?: string }>
+  incoming?: Array<{ source: string; type: EdgeType; label?: string }>
+  threadIds?: string[]
+}
+
+interface NodeDetailSidebarProps {
+  node: NodeData | null
+  onClose: () => void
+  onNodeClick?: (nodeId: string) => void
+  onThreadClick?: (threadId: string) => void
+}
+
+export function NodeDetailSidebar({ node, onClose, onNodeClick, onThreadClick }: NodeDetailSidebarProps) {
+  const [coordinating, setCoordinating] = useState(false)
+  const [coordinated, setCoordinated] = useState(false)
+  const [coordCount, setCoordCount] = useState(0)
+  const [session, setSession] = useState<any>(null)
+
+  useEffect(() => {
+    if (!node) return
+    setCoordinated(false)
+    setCoordCount(0)
+    
+    supabase.auth.getSession().then(({ data }) => setSession(data.session))
+
+    // Check if already coordinated + get count
+    supabase.from('coordination_interests').select('id, participant_id').eq('artifact_id', node.id).then(({ data }) => {
+      if (data) {
+        setCoordCount(data.length)
+        supabase.auth.getSession().then(({ data: s }) => {
+          if (s.session) {
+            supabase.from('participants').select('id').eq('auth_user_id', s.session.user.id).single().then(({ data: p }) => {
+              if (p && data.some(d => d.participant_id === p.id)) {
+                setCoordinated(true)
+              }
+            })
+          }
+        })
+      }
+    })
+  }, [node?.id])
+
+  async function handleCoordinate() {
+    if (!session || !node) return
+    setCoordinating(true)
+    try {
+      // Get or create participant
+      const { data: p } = await supabase.from('participants').select('id').eq('auth_user_id', session.user.id).single()
+      if (!p) {
+        // Create participant
+        const { data: np } = await supabase.from('participants').insert({ name: session.user.email?.split('@')[0] || 'anon', auth_user_id: session.user.id }).select('id').single()
+        if (np) {
+          await supabase.from('coordination_interests').insert({ artifact_id: node.id, participant_id: np.id })
+        }
+      } else {
+        await supabase.from('coordination_interests').insert({ artifact_id: node.id, participant_id: p.id })
+      }
+      setCoordinated(true)
+      setCoordCount(c => c + 1)
+    } catch (e) {
+      logger.error('Coordinate error:', e)
+    }
+    setCoordinating(false)
+  }
+
+  if (!node) return null
+
+  const typeMeta = node.type ? NODE_TYPE_METADATA[node.type] : null
+  const allDimensions = node.dimensions || (node.dimension ? [node.dimension] : [])
+  const allTags = node.tags || []
+  const outgoing = node.outgoing || []
+  const incoming = node.incoming || []
+
+  function formatDate(dateStr?: string) {
+    if (!dateStr) return 'Unknown'
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  return (
+    <div className="fixed top-0 right-0 h-full w-96 bg-co-bg border-l border-co-border shadow-2xl overflow-y-auto z-50">
+      <div className="sticky top-0 bg-co-bg border-b border-co-border p-4 flex items-center justify-between">
+        <h2 className="font-bold text-lg">Node Details</h2>
+        <button
+          onClick={onClose}
+          className="text-gray-400 hover:text-white p-1 rounded hover:bg-co-surface"
+          aria-label="Close node details"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="p-4 space-y-4">
+        {/* Type Badge */}
+        {typeMeta && (
+          <div className="flex items-center gap-2">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: typeMeta.color }}
+            />
+            <span className="text-sm font-medium" style={{ color: typeMeta.color }}>
+              {typeMeta.label}
+            </span>
+          </div>
+        )}
+
+        {/* Label */}
+        <div>
+          <h3 className="text-xl font-bold text-white mb-1">{node.label}</h3>
+          {node.description && (
+            <p className="text-sm text-gray-400">{node.description}</p>
+          )}
+        </div>
+
+        {/* Metadata Row */}
+        <div className="flex items-center gap-4 text-xs text-gray-500">
+          {node.created_at && (
+            <div className="flex items-center gap-1">
+              <Calendar className="w-3 h-3" />
+              <span>{formatDate(node.created_at)}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-1">
+            <LinkIcon className="w-3 h-3" />
+            <span>{outgoing.length + incoming.length} connections</span>
+          </div>
+        </div>
+
+        {/* Coordinate Button */}
+        {session && (
+          <button
+            onClick={handleCoordinate}
+            disabled={coordinated || coordinating}
+            className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              coordinated
+                ? 'bg-amber-900/20 border border-amber-700/30 text-amber-400 cursor-default'
+                : 'bg-[#fbbf24] text-co-bg hover:bg-[#fbbf24]'
+            }`}
+          >
+            <Flame className="w-4 h-4" />
+            {coordinating ? 'Signaling...' : coordinated ? `Coordinating (${coordCount})` : `Coordinate${coordCount > 0 ? ` (${coordCount})` : ''}`}
+          </button>
+        )}
+        {!session && (
+          <a
+            href="/app/auth"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium bg-co-surface border border-co-border text-gray-400 hover:text-white hover:border-[#fbbf24]/30 transition-colors"
+          >
+            <Flame className="w-4 h-4" />
+            Sign in to Coordinate
+          </a>
+        )}
+
+        {/* Dimensions */}
+        {allDimensions.length > 0 && (
+          <div>
+            <div className="text-xs font-bold text-gray-500 uppercase mb-2">Dimensions</div>
+            <div className="flex flex-wrap gap-1">
+              {allDimensions.map(dim => (
+                <span
+                  key={dim}
+                  className="px-2 py-0.5 text-xs rounded-full bg-co-surface text-gray-300 border border-co-border"
+                >
+                  {dim}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Tags */}
+        {allTags.length > 0 && (
+          <div>
+            <div className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
+              <Tag className="w-3 h-3" />
+              Tags
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {allTags.map(tag => (
+                <span
+                  key={tag}
+                  className="px-2 py-0.5 text-xs rounded bg-co-primary/10 text-co-primary border border-co-primary/20"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Outgoing Connections */}
+        {outgoing.length > 0 && (
+          <div>
+            <div className="text-xs font-bold text-gray-500 uppercase mb-2">
+              Outgoing ({outgoing.length})
+            </div>
+            <div className="space-y-1">
+              {outgoing.map((conn, i) => {
+                const edgeMeta = EDGE_TYPE_METADATA[conn.type]
+                return (
+                  <button
+                    key={`${conn.target}-${i}`}
+                    onClick={() => onNodeClick?.(conn.target)}
+                    className="w-full text-left p-2 rounded bg-co-surface hover:bg-co-border border border-co-border hover:border-co-primary/30 transition-colors group"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <span
+                        className="text-xs font-medium"
+                        style={{ color: edgeMeta.color }}
+                      >
+                        {edgeMeta.label}
+                      </span>
+                      <span className="text-gray-600">→</span>
+                    </div>
+                    <div className="text-sm text-gray-300 group-hover:text-white flex items-center gap-1">
+                      {conn.label || conn.target}
+                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100" />
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Incoming Connections */}
+        {incoming.length > 0 && (
+          <div>
+            <div className="text-xs font-bold text-gray-500 uppercase mb-2">
+              Incoming ({incoming.length})
+            </div>
+            <div className="space-y-1">
+              {incoming.map((conn, i) => {
+                const edgeMeta = EDGE_TYPE_METADATA[conn.type]
+                return (
+                  <button
+                    key={`${conn.source}-${i}`}
+                    onClick={() => onNodeClick?.(conn.source)}
+                    className="w-full text-left p-2 rounded bg-co-surface hover:bg-co-border border border-co-border hover:border-co-primary/30 transition-colors group"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-gray-600">←</span>
+                      <span
+                        className="text-xs font-medium"
+                        style={{ color: edgeMeta.color }}
+                      >
+                        {edgeMeta.label}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-300 group-hover:text-white flex items-center gap-1">
+                      {conn.label || conn.source}
+                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100" />
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Linked Threads */}
+        {node.threadIds && node.threadIds.length > 0 && (
+          <div>
+            <div className="text-xs font-bold text-gray-500 uppercase mb-2">
+              Related Threads ({node.threadIds.length})
+            </div>
+            <div className="space-y-1">
+              {node.threadIds.map(threadId => (
+                <button
+                  key={threadId}
+                  onClick={() => onThreadClick?.(threadId)}
+                  className="w-full text-left p-2 rounded bg-co-surface hover:bg-co-border border border-co-border hover:border-co-primary/30 transition-colors text-sm text-gray-300 hover:text-white"
+                >
+                  Thread #{threadId.slice(0, 8)}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Additional Metadata */}
+        {node.metadata && Object.keys(node.metadata).length > 0 && (
+          <div>
+            <div className="text-xs font-bold text-gray-500 uppercase mb-2">Metadata</div>
+            <div className="space-y-1 text-xs">
+              {Object.entries(node.metadata).map(([key, value]) => (
+                <div key={key} className="flex gap-2">
+                  <span className="text-gray-500 capitalize">{key}:</span>
+                  <span className="text-gray-300">{String(value)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

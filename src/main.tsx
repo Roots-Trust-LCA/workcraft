@@ -1,26 +1,43 @@
-// @ts-nocheck
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import './index.css'
-import { AppShell } from './AppShell'
-import { Coordinate } from './pages/Coordinate'
-import { SprintDetail } from './pages/SprintDetail'
-import { SwarmViz } from './pages/SwarmViz'
-import Analytics from './pages/coordinate/Analytics'
+import { WorkshopProvider } from './lib/workshop-context'
+import { createDefaultConfig } from './lib/workshop-config'
+import App from './App'
+import './styles/workshop.css'
+
+/**
+ * Workshop entry point.
+ *
+ * Configuration reads from environment variables (VITE_*) with sensible defaults.
+ * For production, set these in .env or at build time.
+ *
+ * For maximum flexibility, you can also import WorkshopProvider + createDefaultConfig
+ * and embed the Workshop inside any React app.
+ */
+const config = createDefaultConfig({
+  name: import.meta.env.VITE_WORKSHOP_NAME || 'Workshop',
+  description: import.meta.env.VITE_WORKSHOP_DESCRIPTION || 'Agent Coordination Workshop',
+  supabaseUrl: import.meta.env.VITE_SUPABASE_URL || '',
+  supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+  requireAuth: false,
+  requireAuthToWrite: import.meta.env.VITE_REQUIRE_AUTH_TO_WRITE === 'true',
+  org: {
+    name: import.meta.env.VITE_ORG_NAME || 'Workshop',
+    url: import.meta.env.VITE_ORG_URL || undefined,
+  },
+  protocol: {
+    phases: ['Discovery', 'Proposal', 'Negotiation', 'Execution', 'Synthesis'],
+    humanReviewDefault: import.meta.env.VITE_HUMAN_REVIEW_DEFAULT !== 'false',
+    maxWipPerAgent: parseInt(import.meta.env.VITE_MAX_WIP_PER_AGENT || '2', 10),
+    agingAlertDays: parseInt(import.meta.env.VITE_AGING_ALERT_DAYS || '14', 10),
+    sprintIdPrefix: import.meta.env.VITE_SPRINT_ID_PREFIX || 'P',
+  },
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename="/workcraft">
-      <Routes>
-        <Route element={<AppShell />}>
-          <Route index element={<Coordinate />} />
-          <Route path="sprint/:id" element={<SprintDetail />} />
-          <Route path="swarm" element={<SwarmViz />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <WorkshopProvider config={config}>
+      <App />
+    </WorkshopProvider>
   </StrictMode>,
 )

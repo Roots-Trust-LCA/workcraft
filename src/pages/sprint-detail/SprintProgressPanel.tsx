@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { FileText, Circle, ChevronDown, ChevronUp } from 'lucide-react'
 import { timeAgo } from './SprintDetailHelpers'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface SprintProgressPanelProps {
@@ -11,9 +10,7 @@ interface SprintProgressPanelProps {
 }
 
 export function SprintProgressPanel({ sprint }: SprintProgressPanelProps) {
-  usePageTitle('Sprint Progress Panel')
-
-  const [expandedLogs, setExpandedLogs] = useState(false)
+const [expandedLogs, setExpandedLogs] = useState(false)
 
   const progressLog: unknown[] = (sprint as any).progress_log || []
   const negotiationLog: unknown[] = (sprint as any).negotiation_log || []

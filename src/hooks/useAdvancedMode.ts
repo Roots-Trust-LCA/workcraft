@@ -1,21 +1,11 @@
-/**
- * useAdvancedMode — Toggle for advanced coordination features.
- * Persisted in localStorage so it sticks across sessions.
- */
-
 import { useState, useCallback } from 'react'
 
-const STORAGE_KEY = 'coordinate-advanced-mode'
+const STORAGE_KEY = 'workshop-advanced-mode'
 
 export function useAdvancedMode(): [boolean, () => void] {
   const [enabled, setEnabled] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) === '1'
-    } catch {
-      return false
-    }
+    try { return localStorage.getItem(STORAGE_KEY) === '1' } catch { return false }
   })
-
   const toggle = useCallback(() => {
     setEnabled(prev => {
       const next = !prev
@@ -23,6 +13,5 @@ export function useAdvancedMode(): [boolean, () => void] {
       return next
     })
   }, [])
-
   return [enabled, toggle]
 }

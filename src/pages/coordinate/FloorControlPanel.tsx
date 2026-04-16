@@ -9,9 +9,7 @@ import {
   Radio, Mic, MicOff, ArrowRight, GitBranch,
   ChevronDown,
 } from 'lucide-react'
-import { supabase } from '../../lib/supabase'
 import { CRAFT_SYMBOLS, PHASES, SIGNAL_ICONS, timeAgo } from './constants'
-import { usePageTitle } from '../../hooks/usePageTitle'
 
 
 interface FloorControlPanelProps {
@@ -23,9 +21,7 @@ interface FloorControlPanelProps {
 }
 
 export function FloorControlPanel({ floor, signals, presence, workshopChannelId, onFloorReload }: FloorControlPanelProps) {
-  usePageTitle('Floor Control Panel')
-
-  const [floorLoading, setFloorLoading] = useState<string | null>(null)
+const [floorLoading, setFloorLoading] = useState<string | null>(null)
 
   // Auto-expand when floor was recently active (within 30 min)
   const updatedAt = floor?.updated_at

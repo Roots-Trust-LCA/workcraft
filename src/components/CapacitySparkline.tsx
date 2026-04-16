@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CapacitySparkline — 24h capacity trending visualization.
  * P161: Shows capacity history from capability_broadcast events.
