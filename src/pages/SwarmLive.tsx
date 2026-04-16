@@ -148,7 +148,7 @@ const { supabase } = useWorkshop()
 
     async function init() {
       const { data: ch } = await supabase
-        .from('guild_channels').select('id').eq('slug', 'workshop').single()
+        .from('guild_channels').select('id').eq('slug', 'workshop').maybeSingle()
       chId = ch?.id || null
       setWorkshopChannelId(chId)
       await Promise.all([

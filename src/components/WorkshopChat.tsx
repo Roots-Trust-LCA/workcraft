@@ -79,8 +79,8 @@ export function WorkshopChat({ channelName = 'workshop' }: WorkshopChatProps) {
     supabase
       .from('guild_channels')
       .select('id')
-      .eq('name', channelName)
-      .single()
+      .eq('slug', channelName)
+      .maybeSingle()
       .then(({ data }) => {
         if (data) setChannelId(data.id)
       })

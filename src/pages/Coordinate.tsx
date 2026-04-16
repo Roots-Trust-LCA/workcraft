@@ -272,7 +272,7 @@ const { supabase } = useWorkshop()
       // P210: fire channel-independent queries in parallel with the guild_channels lookup
       // instead of serializing everything behind it (saves ~200-400ms off initial load)
       const [chRes] = await Promise.all([
-        supabase.from('guild_channels').select('id').eq('slug', 'workshop').single(),
+        supabase.from('guild_channels').select('id').eq('slug', 'workshop').maybeSingle(),
         loadPresence(),
         loadSprints(),
         loadCompletedSprints(),
