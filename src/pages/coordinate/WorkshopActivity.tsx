@@ -244,7 +244,7 @@ export function WorkshopActivity({ activity, sprints, completedSprints, workshop
 
   return (
     <div className="bg-co-bg border border-co-border rounded-lg overflow-hidden">
-      <div className="px-4 py-3 border-b flex items-center gap-2" >
+      <div className="px-4 py-3 border-b border-co-border flex items-center gap-2" >
         <MessageSquare className="w-3.5 h-3.5" />
         <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.68rem', color: 'var(--co-text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           Workshop Activity
@@ -343,7 +343,7 @@ export function WorkshopActivity({ activity, sprints, completedSprints, workshop
 
       {/* P169: Compose with required title + message */}
       {workshopChannelId && (
-        <div className="border-t p-3" >
+        <div className="border-t border-co-border p-3" >
           <input
             type="text"
             value={composeTitle}

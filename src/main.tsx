@@ -11,7 +11,7 @@ import Analytics from './pages/coordinate/Analytics'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename="/workcraft">
+    <BrowserRouter basename="/workshop">
       <Routes>
         <Route element={<AppShell />}>
           <Route index element={<Coordinate />} />

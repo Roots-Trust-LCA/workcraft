@@ -30,7 +30,7 @@ export function CraftPresenceGrid({ presence, sprints }: CraftPresenceGridProps)
   const [capacityHistory, setCapacityHistory] = useState<Record<string, Array<{ timestamp: string; capacity: number }>>>({})
 
   const now = Date.now()
-  const onlineThreshold = 15 * 60 * 1000
+  const onlineThreshold = 45 * 60 * 1000
   const inactiveThreshold = 2 * 60 * 60 * 1000
   const recentThreshold = 24 * 60 * 60 * 1000
   const onlineCount = presence.filter(p => p.last_seen && (now - new Date((p as any).last_seen).getTime()) < onlineThreshold).length
@@ -88,10 +88,10 @@ export function CraftPresenceGrid({ presence, sprints }: CraftPresenceGridProps)
   return (
     <div className="bg-co-bg border border-co-border rounded-lg overflow-hidden">
       {/* Header */}
-      <div className="px-4 py-3 border-b flex items-center gap-2" >
+      <div className="px-4 py-3 border-b border-co-border flex items-center gap-2" >
         <Users className="w-3.5 h-3.5" />
         <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.68rem', color: 'var(--co-text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          Craft Presence
+          Active Agents
         </span>
         {presence.length > 0 && (
           <span className="ml-auto" >

@@ -19,7 +19,7 @@ import { supabase } from '../lib/supabase'
 import type { CoordinationProposal } from '../types/coordination'
 import { logger } from '../lib/logger'
 import {
-  Radio, Activity, FileText, ShieldCheck, ShieldAlert, Settings2, BarChart2, PlusCircle, AlertTriangle,
+  Radio, Activity, FileText, ShieldCheck, ShieldAlert, Settings2, BarChart2, PlusCircle, AlertTriangle, Zap, CheckCircle, Clock,
 } from 'lucide-react'
 import ProtocolActivityStream from '../components/ProtocolActivityStream'
 import { useAdvancedMode } from '../hooks/useAdvancedMode'
@@ -30,6 +30,8 @@ import { FloorControlPanel } from './coordinate/FloorControlPanel'
 import { SharedLinksPanel } from './coordinate/SharedLinksPanel'
 import { WorkshopActivity } from './coordinate/WorkshopActivity'
 import { SprintTabs } from './coordinate/SprintTabs'
+import { RoadmapPanel } from './coordinate/RoadmapPanel'
+import { WorkshopOverview } from './coordinate/WorkshopOverview'
 import { EventDetailModal } from './coordinate/EventDetailModal'
 import { MessageDetailModal } from './coordinate/MessageDetailModal'
 import { ProposeSprintModal } from './coordinate/ProposeSprintModal'
@@ -255,6 +257,7 @@ export function Coordinate() {
         .on('postgres_changes', { event: '*', schema: 'public', table: 'coordination_requests' }, () => { loadSprints(); loadCompletedSprints(); loadPinnedSprints() })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'guild_messages' }, () => { if (chId) loadActivity(chId) })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'coordination_links' }, () => { loadLinks() })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'roadmap_items' }, () => { /* RoadmapPanel handles its own subscription */ })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'protocol_events' }, () => { if (chId) loadProtocolEvents(chId) })
         .subscribe((status) => {
           logger.info('[Realtime] workshop-dashboard status:', status)
@@ -330,7 +333,7 @@ export function Coordinate() {
   // ── Derived values for health bar ─────────────────────────────────────────
 
   const activeSprints = sprints.filter(s => s.status === 'in_progress')
-  const onlineThreshold = 15 * 60 * 1000
+  const onlineThreshold = 45 * 60 * 1000
   const now = Date.now()
   const onlineCount = presence.filter(p => p.last_seen && (now - new Date(p.last_seen).getTime()) < onlineThreshold).length
   const totalPresent = presence.length
@@ -476,127 +479,188 @@ export function Coordinate() {
         </div>
       </div>
 
-      {/* ── Protocol Health Bar ─────────────────────────────────── */}
-      {/* P304: Responsive health bar — tighter gap on mobile */}
-      <div className="bg-co-bg border border-co-border rounded-lg px-3 sm:px-5 py-3 mb-4 flex items-center gap-3 sm:gap-6 flex-wrap">
-        <div className="flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${onlineCount > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`} />
-          <span className="text-xs text-co-text">
-            <span className="font-medium text-co-text">{onlineCount}</span> online
-            {totalPresent > onlineCount && <span className="text-co-text-muted"> · {totalPresent} known</span>}
-          </span>
-        </div>
-        <div className="text-xs text-co-text">
-          <span className="font-medium text-co-text">{activeSprints.length}</span> active sprint{activeSprints.length !== 1 ? 's' : ''}
-        </div>
-        {sprints.filter((s) => s.status === 'proposed').length > 0 && (
-          <div className="text-xs text-co-text">
-            <span className="font-medium text-co-primary">{sprints.filter((s) => s.status === 'proposed').length}</span> awaiting claim
-          </div>
-        )}
-        {sprints.filter((s) => s.status === 'testing').length > 0 && (
-          <div className="text-xs text-co-text">
-            <span className="font-medium text-[#7ccfb8]">{sprints.filter((s) => s.status === 'testing').length}</span> in testing
-          </div>
-        )}
-        {completedSprints.length > 0 && (completedSprints[0] as unknown).completed_at && (
-          <div className="text-xs text-co-text-muted">Last completed {timeAgo((completedSprints[0] as unknown).completed_at)}</div>
-        )}
-        {lastHeartbeat && (
-          <div className="text-xs text-co-text-muted">Last heartbeat {timeAgo(lastHeartbeat)}</div>
-        )}
+      {/* ── Enhanced Health Bar ─────────────────────────────────── */}
+      {(() => {
+        // Compute analytics from loaded data
+        const proposedCount = sprints.filter(s => s.status === 'proposed').length
+        const testingCount = sprints.filter(s => s.status === 'testing').length
+        const inProgressCount = activeSprints.length
 
-        {/* P85: Consensus-based SKILL.md hash (advanced only) — P304: hidden on mobile */}
-        {advancedMode && (
-          <div className="hidden sm:flex items-center gap-2 ml-auto">
-            {consensusHash && (
-              <button
-                onClick={() => { navigator.clipboard.writeText(consensusHash) }}
-                title={`Consensus SKILL.md hash: ${consensusHash}\nClick to copy`}
-                role="main" aria-label={`Copy consensus SKILL hash ${consensusHash.slice(0, 8)}`}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '4px',
-                  fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem',
-                  color: 'var(--co-text-muted)', background: 'transparent', border: '1px solid var(--co-border)',
-                  borderRadius: '3px', padding: '2px 8px', cursor: 'pointer',
-                }}
-              >
-                <FileText size={10} className="text-co-text-muted" />
-                {consensusHash.slice(0, 8)}…
-              </button>
-            )}
-            {isSplit && (
-              <span
-                title="Agents are reporting different SKILL.md hashes — no consensus"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '4px',
-                  fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem',
-                  color: '#facc15', background: '#facc1510',
-                  border: '1px solid #facc1533', borderRadius: '3px', padding: '2px 8px',
-                }}
-              >
-                <ShieldAlert size={10} />
-                split — no consensus
-              </span>
-            )}
-            {!isSplit && totalWithHash > 0 && (
-              <span
-                title={`${alignedCount} of ${totalWithHash} agents agree on SKILL.md hash (consensus-derived)`}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '4px',
-                  fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem',
-                  color: alignedCount === totalWithHash ? '#4ade80' : '#facc15',
-                  background: alignedCount === totalWithHash ? '#4ade8010' : '#facc1510',
-                  border: `1px solid ${alignedCount === totalWithHash ? '#4ade8033' : '#facc1533'}`,
-                  borderRadius: '3px', padding: '2px 8px',
-                }}
-              >
-                {alignedCount === totalWithHash ? <ShieldCheck size={10} /> : <ShieldAlert />}
-                {alignedCount}/{totalWithHash} aligned
-              </span>
-            )}
+        // 7-day velocity
+        const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
+        const recentCompleted = completedSprints.filter(s => s.completed_at && new Date(s.completed_at).getTime() > sevenDaysAgo)
+        const weeklyVelocity = recentCompleted.length
+
+        // Average completion time (for sprints with both claimed_at and completed_at)
+        const withTiming = completedSprints.filter(s => s.claimed_at && s.completed_at)
+        const avgHours = withTiming.length > 0
+          ? withTiming.reduce((sum, s) => sum + (new Date(s.completed_at).getTime() - new Date(s.claimed_at).getTime()) / 3600000, 0) / withTiming.length
+          : 0
+
+        // 24h protocol events
+        const dayAgo = Date.now() - 24 * 60 * 60 * 1000
+        const recentEvents = protocolEvents.filter(e => e.created_at && new Date(e.created_at).getTime() > dayAgo)
+
+        return (
+          <div className="bg-co-bg border border-co-border rounded-lg mb-4 overflow-hidden">
+            {/* Top row: live status */}
+            <div className="px-3 sm:px-5 py-3 flex items-center gap-3 sm:gap-5 flex-wrap">
+              <div className="flex items-center gap-2">
+                <span className={`w-2 h-2 rounded-full ${onlineCount > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`} />
+                <span className="text-xs text-co-text">
+                  <span className="font-medium">{onlineCount}</span> online
+                  {totalPresent > onlineCount && <span className="text-co-text-muted"> · {totalPresent} known</span>}
+                </span>
+              </div>
+              {inProgressCount > 0 && (
+                <div className="text-xs text-co-text">
+                  <span className="font-medium" style={{ color: 'var(--co-primary)' }}>{inProgressCount}</span> active
+                </div>
+              )}
+              {proposedCount > 0 && (
+                <div className="text-xs text-co-text">
+                  <span className="font-medium text-[#a78bfa]">{proposedCount}</span> awaiting claim
+                </div>
+              )}
+              {testingCount > 0 && (
+                <div className="text-xs text-co-text">
+                  <span className="font-medium text-[#7ccfb8]">{testingCount}</span> in review
+                </div>
+              )}
+              {lastHeartbeat && (
+                <div className="text-xs text-co-text-muted">Heartbeat {timeAgo(lastHeartbeat)}</div>
+              )}
+
+              {/* Hash alignment (advanced) */}
+              {advancedMode && (
+                <div className="hidden sm:flex items-center gap-2 ml-auto">
+                  {consensusHash && (
+                    <button
+                      onClick={() => { navigator.clipboard.writeText(consensusHash) }}
+                      title={`Consensus SKILL.md hash: ${consensusHash}\nClick to copy`}
+                      aria-label={`Copy consensus SKILL hash ${consensusHash.slice(0, 8)}`}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '4px',
+                        fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem',
+                        color: 'var(--co-text-muted)', background: 'transparent', border: '1px solid var(--co-border)',
+                        borderRadius: '3px', padding: '2px 8px', cursor: 'pointer',
+                      }}
+                    >
+                      <FileText size={10} className="text-co-text-muted" />
+                      {consensusHash.slice(0, 8)}…
+                    </button>
+                  )}
+                  {isSplit && (
+                    <span title="Agents reporting different SKILL.md hashes" style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '4px',
+                      fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem',
+                      color: '#facc15', background: '#facc1510', border: '1px solid #facc1533', borderRadius: '3px', padding: '2px 8px',
+                    }}>
+                      <ShieldAlert size={10} /> split
+                    </span>
+                  )}
+                  {!isSplit && totalWithHash > 0 && (
+                    <span title={`${alignedCount}/${totalWithHash} agents on same hash`} style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '4px',
+                      fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.62rem',
+                      color: alignedCount === totalWithHash ? '#4ade80' : '#facc15',
+                      background: alignedCount === totalWithHash ? '#4ade8010' : '#facc1510',
+                      border: `1px solid ${alignedCount === totalWithHash ? '#4ade8033' : '#facc1533'}`,
+                      borderRadius: '3px', padding: '2px 8px',
+                    }}>
+                      {alignedCount === totalWithHash ? <ShieldCheck size={10} /> : <ShieldAlert size={10} />}
+                      {alignedCount}/{totalWithHash}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Bottom row: analytics metrics */}
+            <div className="px-3 sm:px-5 py-2.5 border-t flex items-center gap-4 sm:gap-6 flex-wrap" style={{ borderColor: '#1a1a1a', background: '#0a0a0a' }}>
+              <div className="flex items-center gap-1.5" title="Sprints completed in the last 7 days">
+                <Zap className="w-3 h-3" style={{ color: 'var(--co-primary)' }} />
+                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.68rem', color: 'var(--co-text)' }}>
+                  <span style={{ fontWeight: 600 }}>{weeklyVelocity}</span>
+                  <span style={{ color: 'var(--co-text-muted)' }}> /7d</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5" title="Total completed sprints (last 90 days)">
+                <CheckCircle className="w-3 h-3 text-[#7ccfb8]" />
+                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.68rem', color: 'var(--co-text)' }}>
+                  <span style={{ fontWeight: 600 }}>{completedSprints.length}</span>
+                  <span style={{ color: 'var(--co-text-muted)' }}> completed</span>
+                </span>
+              </div>
+              {avgHours > 0 && (
+                <div className="flex items-center gap-1.5" title="Average time from claim to completion">
+                  <Clock className="w-3 h-3 text-[#8bbfff]" />
+                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.68rem', color: 'var(--co-text)' }}>
+                    <span style={{ fontWeight: 600 }}>
+                      {avgHours < 1 ? `${Math.round(avgHours * 60)}m` : avgHours < 24 ? `${avgHours.toFixed(1)}h` : `${(avgHours / 24).toFixed(1)}d`}
+                    </span>
+                    <span style={{ color: 'var(--co-text-muted)' }}> avg</span>
+                  </span>
+                </div>
+              )}
+              <div className="flex items-center gap-1.5" title="Protocol events in the last 24 hours">
+                <Activity className="w-3 h-3 text-[#a78bfa]" />
+                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.68rem', color: 'var(--co-text)' }}>
+                  <span style={{ fontWeight: 600 }}>{recentEvents.length}</span>
+                  <span style={{ color: 'var(--co-text-muted)' }}> events/24h</span>
+                </span>
+              </div>
+              {completedSprints.length > 0 && completedSprints[0].completed_at && (
+                <div className="hidden sm:block text-co-text-muted" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.65rem', marginLeft: 'auto' }}>
+                  Last closed {timeAgo(completedSprints[0].completed_at)}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
+        )
+      })()}
+
+      {/* ── Workshop Overview (unified: roadmap + sprints + agents) */}
+      <WorkshopOverview sprints={sprints} presence={presence} />
 
       {/* ── P111: Live Protocol Activity Stream (advanced only) ──── */}
       {advancedMode && <ProtocolActivityStream protocolEvents={protocolEvents} />}
 
-      {/* ── Top row: Capability Grid | Floor + Shared Links ───────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-
-        {/* Left column: Craft Presence + Workshop Activity */}
-        <div className="flex flex-col gap-4">
-          <CraftPresenceGrid presence={presence} sprints={sprints} />
-          <WorkshopActivity
-            activity={activity}
-            sprints={sprints}
-            completedSprints={completedSprints}
+      {/* ── Content panels (vertical stack) ──────────────────────── */}
+      <div className="flex flex-col gap-4 mb-4">
+        <CraftPresenceGrid presence={presence} sprints={sprints} />
+        <WorkshopActivity
+          activity={activity}
+          sprints={sprints}
+          completedSprints={completedSprints}
+          workshopChannelId={workshopChannelId}
+          onSelectMessage={setSelectedMessage}
+        />
+        {advancedMode && (
+          <FloorControlPanel
+            floor={floor}
+            signals={signals}
+            presence={presence}
             workshopChannelId={workshopChannelId}
-            onSelectMessage={setSelectedMessage}
+            onFloorReload={() => { if (workshopChannelId) loadFloor(workshopChannelId) }}
           />
-        </div>
-
-        {/* Right column: Floor Control (advanced) + Shared Links */}
-        <div className="flex flex-col gap-4">
-          {advancedMode && (
-            <FloorControlPanel
-              floor={floor}
-              signals={signals}
-              presence={presence}
-              workshopChannelId={workshopChannelId}
-              onFloorReload={() => { if (workshopChannelId) loadFloor(workshopChannelId) }}
-            />
-          )}
-          <SharedLinksPanel
-            links={links}
-            sprints={sprints}
-            completedSprints={completedSprints}
-          />
-        </div>
+        )}
+        <SharedLinksPanel
+          links={links}
+          sprints={sprints}
+          completedSprints={completedSprints}
+        />
       </div>
 
+      {/* ── Roadmap ────────────────────────────────────────────────── */}
+      <div id="roadmap-panel" />
+      <RoadmapPanel
+        sprints={sprints}
+        completedSprints={completedSprints}
+      />
+
       {/* ── Sprints + Protocol Stream ──────────────────────────────── */}
+      <div id="sprint-tabs" />
       <SprintTabs
         sprints={sprints}
         completedSprints={completedSprints}

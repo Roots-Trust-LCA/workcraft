@@ -742,7 +742,7 @@ export default function Analytics() {
     // Active agents (last 7 days)
     const { count: activeCount } = await supabase
       .from('agent_presence')
-      .select('id', { count: 'exact', head: true })
+      .select('agent_id', { count: 'exact', head: true })
       .gte('last_seen', ago7)
 
     // Protocol events (last 30 days)
