@@ -35,6 +35,37 @@ import { MessageDetailModal } from './coordinate/MessageDetailModal'
 import { ProposeSprintModal } from './coordinate/ProposeSprintModal'
 import { deriveConsensusHash, timeAgo } from './coordinate/constants'
 
+// ── Tenant scope filter ───────────────────────────────────────────────────────
+// White-label / multi-tenant model: each tenant deployment sets VITE_REPO_FILTER
+// to the GitHub repo URL(s) they want to scope to. Empty = show all activity.
+//
+// Examples:
+//   VITE_REPO_FILTER=https://github.com/RegenHub-Boulder/techne.institute
+//   VITE_REPO_FILTER=https://github.com/my-org/my-repo
+//
+// Multiple repos: comma-separated values are each checked independently.
+const REPO_FILTER = import.meta.env.VITE_REPO_FILTER ?? ''
+
+// Parse comma-separated filter into an array of lowercase strings
+const REPO_FILTERS: string[] = REPO_FILTER
+  ? REPO_FILTER.split(',').map((s: string) => s.trim().toLowerCase()).filter(Boolean)
+  : []
+
+function sprintMatchesRepo(sprint: any, filters: string[]): boolean {
+  if (!filters.length) return true
+  return filters.some(f => {
+    // Primary: reference_urls contains the repo URL (most precise)
+    if (sprint.reference_urls?.some((u: string) => u.toLowerCase().includes(f))) return true
+    // Secondary: title or description mentions the repo (catches legacy sprints)
+    if (sprint.title?.toLowerCase().includes(f)) return true
+    if (sprint.description?.toLowerCase().includes(f)) return true
+    // Taxonomy scope/domain
+    if (sprint.taxonomy?.scope?.toLowerCase().includes(f)) return true
+    if (sprint.taxonomy?.domain?.toLowerCase().includes(f)) return true
+    return false
+  })
+}
+
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function Coordinate() {
@@ -120,7 +151,7 @@ const { supabase } = useWorkshop()
         .order('created_at', { ascending: false })
         .limit(100)
       if (error) throw error
-      setSprints(data || [])
+      setSprints((data || []).filter((s: any) => sprintMatchesRepo(s, REPO_FILTERS)))
     } catch (err) { addError('Load sprints', err) }
   }, [addError])
 
@@ -138,7 +169,7 @@ const { supabase } = useWorkshop()
         .eq('status', 'pinned')
         .order('created_at', { ascending: false })
       if (error) throw error
-      setPinnedSprints(data || [])
+      setPinnedSprints((data || []).filter((s: any) => sprintMatchesRepo(s, REPO_FILTERS)))
     } catch (err) { addError('Load pinned sprints', err) }
   }, [addError])
 
@@ -159,11 +190,13 @@ const { supabase } = useWorkshop()
         .order('completed_at', { ascending: false })
         .limit(500)
       if (error) throw error
-      const sorted = (data || []).sort((a: CoordinationProposal, b: CoordinationProposal) => {
-        const ta = a.completed_at ? new Date(a.completed_at).getTime() : 0
-        const tb = b.completed_at ? new Date(b.completed_at).getTime() : 0
-        return tb - ta
-      })
+      const sorted = (data || [])
+        .filter((s: any) => sprintMatchesRepo(s, REPO_FILTERS))
+        .sort((a: CoordinationProposal, b: CoordinationProposal) => {
+          const ta = a.completed_at ? new Date(a.completed_at).getTime() : 0
+          const tb = b.completed_at ? new Date(b.completed_at).getTime() : 0
+          return tb - ta
+        })
       setCompletedSprints(sorted)
     } catch (err) { addError('Load completed sprints', err) }
   }, [addError])
@@ -352,7 +385,28 @@ const { supabase } = useWorkshop()
       <div className="mb-5 pt-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
         <div>
           <h1 className="text-xl font-semibold mb-0.5 text-co-text">Workshop Coordination</h1>
-          <p className="text-co-text-muted text-sm">Agent-to-agent protocol · co-op.us</p>
+          <p className="text-co-text-muted text-sm">
+            Agent-to-agent protocol · co-op.us
+            {REPO_FILTERS.length > 0 && (
+              <span style={{
+                marginLeft: '0.6em',
+                fontFamily: 'IBM Plex Mono, monospace',
+                fontSize: '0.72rem',
+                color: '#8bbfff',
+                border: '1px solid rgba(139,191,255,0.35)',
+                borderRadius: '3px',
+                padding: '1px 6px',
+                background: 'rgba(139,191,255,0.07)',
+                verticalAlign: 'middle',
+              }}>
+                {REPO_FILTERS.map(f => {
+                  // Show just org/repo for GitHub URLs; otherwise show raw value
+                  const m = f.match(/github\.com\/([^/]+\/[^/]+)/)
+                  return m ? m[1] : f
+                }).join(', ')}
+              </span>
+            )}
+          </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           {advancedMode && (
