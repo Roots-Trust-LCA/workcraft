@@ -376,13 +376,13 @@ const { supabase } = useWorkshop()
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="max-w-6xl mx-auto pb-12">
+    <div className="max-w-6xl mx-auto">
 
       {errorBanner}
 
       {/* ── Page header ─────────────────────────────────────────── */}
       {/* P304: Responsive header — buttons collapse to icon-only on mobile */}
-      <div className="mb-5 pt-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div>
           <h1 style={{
             fontFamily: 'Inter, system-ui, sans-serif',
@@ -543,33 +543,68 @@ const { supabase } = useWorkshop()
       </div>
 
       {/* ── Protocol Health Bar ─────────────────────────────────── */}
-      {/* P304: Responsive health bar — tighter gap on mobile */}
-      <div className="px-3 sm:px-5 py-3 mb-4 flex items-center gap-3 sm:gap-6 flex-wrap" style={{ background: 'var(--ink)', border: '1px solid var(--border)', borderRadius: '6px' }}>
-        <div className="flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${onlineCount > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`} />
-          <span className="text-xs text-co-text">
-            <span className="font-medium text-co-text">{onlineCount}</span> online
-            {totalPresent > onlineCount && <span className="text-co-text-muted"> · {totalPresent} known</span>}
-          </span>
-        </div>
-        <div className="text-xs text-co-text">
-          <span className="font-medium text-co-text">{activeSprints.length}</span> active sprint{activeSprints.length !== 1 ? 's' : ''}
-        </div>
+      <div className="mb-5 flex items-center gap-2 flex-wrap" style={{
+        background: 'var(--panel)',
+        border: '1px solid var(--border)',
+        borderRadius: '8px',
+        padding: '10px 16px',
+      }}>
+        {/* Online indicator */}
+        <span className="status-chip" style={{
+          color: onlineCount > 0 ? 'var(--status-ok)' : 'var(--muted)',
+          borderColor: onlineCount > 0 ? 'rgba(74,222,128,0.25)' : 'var(--border)',
+          background: onlineCount > 0 ? 'rgba(74,222,128,0.06)' : 'var(--raised)',
+        }}>
+          <span style={{
+            width: 6, height: 6, borderRadius: '50%',
+            background: onlineCount > 0 ? 'var(--status-ok)' : 'var(--dim)',
+            display: 'inline-block',
+            animation: onlineCount > 0 ? 'pulse 2s infinite' : 'none',
+          }} />
+          {onlineCount} online{totalPresent > onlineCount ? ` · ${totalPresent} known` : ''}
+        </span>
+
+        {/* Active sprints */}
+        <span className="status-chip" style={{
+          color: activeSprints.length > 0 ? 'var(--gold)' : 'var(--muted)',
+          borderColor: activeSprints.length > 0 ? 'var(--gold-40)' : 'var(--border)',
+          background: activeSprints.length > 0 ? 'var(--gold-06)' : 'var(--raised)',
+        }}>
+          {activeSprints.length} active
+        </span>
+
+        {/* Awaiting claim */}
         {sprints.filter((s) => s.status === 'proposed').length > 0 && (
-          <div className="text-xs text-co-text">
-            <span className="font-medium text-co-primary">{sprints.filter((s) => s.status === 'proposed').length}</span> awaiting claim
-          </div>
+          <span className="status-chip" style={{
+            color: 'var(--status-warn)',
+            borderColor: 'rgba(251,191,36,0.25)',
+            background: 'rgba(251,191,36,0.06)',
+          }}>
+            {sprints.filter((s) => s.status === 'proposed').length} unclaimed
+          </span>
         )}
+
+        {/* In testing */}
         {sprints.filter((s) => s.status === 'testing').length > 0 && (
-          <div className="text-xs text-co-text">
-            <span className="font-medium text-[#7ccfb8]">{sprints.filter((s) => s.status === 'testing').length}</span> in testing
-          </div>
+          <span className="status-chip" style={{
+            color: 'var(--status-teal)',
+            borderColor: 'rgba(124,207,184,0.25)',
+            background: 'rgba(124,207,184,0.06)',
+          }}>
+            {sprints.filter((s) => s.status === 'testing').length} in review
+          </span>
         )}
+
+        {/* Timestamps */}
         {completedSprints.length > 0 && (completedSprints[0] as unknown).completed_at && (
-          <div className="text-xs text-co-text-muted">Last completed {timeAgo((completedSprints[0] as unknown).completed_at)}</div>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: 'var(--dim)', marginLeft: 'auto' }}>
+            completed {timeAgo((completedSprints[0] as unknown).completed_at)}
+          </span>
         )}
-        {lastHeartbeat && (
-          <div className="text-xs text-co-text-muted">Last heartbeat {timeAgo(lastHeartbeat)}</div>
+        {lastHeartbeat && !((completedSprints[0] as unknown)?.completed_at) && (
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: 'var(--dim)', marginLeft: 'auto' }}>
+            heartbeat {timeAgo(lastHeartbeat)}
+          </span>
         )}
 
         {/* P85: Consensus-based SKILL.md hash (advanced only) — P304: hidden on mobile */}
@@ -629,7 +664,7 @@ const { supabase } = useWorkshop()
       {advancedMode && <ProtocolActivityStream protocolEvents={protocolEvents} />}
 
       {/* ── Top row: Capability Grid | Floor + Shared Links ───────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
 
         {/* Left column: Craft Presence + Workshop Activity */}
         <div className="flex flex-col gap-4">
