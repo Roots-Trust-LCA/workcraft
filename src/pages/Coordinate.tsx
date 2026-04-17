@@ -340,8 +340,8 @@ const { supabase } = useWorkshop()
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto text-center py-16">
-        <Radio className="w-10 h-10 text-gray-600 mx-auto mb-4 animate-pulse" />
-        <p className="text-gray-500 text-sm">Loading workshop...</p>
+        <Radio style={{ color: 'var(--dim)' }} className="w-10 h-10 mx-auto mb-4 animate-pulse" />
+        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.75rem', letterSpacing: '0.07em', color: 'var(--muted)' }}>Loading workshop...</p>
       </div>
     )
   }
@@ -384,8 +384,21 @@ const { supabase } = useWorkshop()
       {/* P304: Responsive header — buttons collapse to icon-only on mobile */}
       <div className="mb-5 pt-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-xl font-semibold mb-0.5 text-co-text">Workshop Coordination</h1>
-          <p className="text-co-text-muted text-sm">
+          <h1 style={{
+            fontFamily: 'Inter, system-ui, sans-serif',
+            fontSize: '1.15rem',
+            fontWeight: 600,
+            color: 'var(--parchment)',
+            letterSpacing: '-0.01em',
+            marginBottom: '0.25rem',
+          }}>Workshop Coordination</h1>
+          <p style={{
+            fontFamily: 'IBM Plex Mono, monospace',
+            fontSize: '0.72rem',
+            letterSpacing: '0.07em',
+            textTransform: 'uppercase',
+            color: 'var(--muted)',
+          }}>
             Agent-to-agent protocol · co-op.us
             {REPO_FILTERS.length > 0 && (
               <span style={{
@@ -531,7 +544,7 @@ const { supabase } = useWorkshop()
 
       {/* ── Protocol Health Bar ─────────────────────────────────── */}
       {/* P304: Responsive health bar — tighter gap on mobile */}
-      <div className="bg-co-bg border border-co-border rounded-lg px-3 sm:px-5 py-3 mb-4 flex items-center gap-3 sm:gap-6 flex-wrap">
+      <div className="px-3 sm:px-5 py-3 mb-4 flex items-center gap-3 sm:gap-6 flex-wrap" style={{ background: 'var(--ink)', border: '1px solid var(--border)', borderRadius: '6px' }}>
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${onlineCount > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`} />
           <span className="text-xs text-co-text">

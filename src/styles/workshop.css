@@ -1,91 +1,290 @@
 @import "tailwindcss";
 
 /**
- * Workshop — standalone base styles.
- * Dark mode by default. Uses Tailwind v4 @theme to map `co-*` color classes
- * (bg-co-bg, text-co-primary, border-co-border, etc.) to the original
- * co-op.us palette so the extracted components render unchanged.
+ * Workshop — Techne Design System
  *
- * To rebrand a deployment, override the @theme values below or set them
- * via CSS custom properties at runtime on :root.
+ * Applies techne.institute/design-system tokens. The original co-op.us palette
+ * (blue/purple-tinted darks) is replaced with Techne's neutral warm palette.
+ * All --co-* vars remain as aliases for backward compat with component code.
+ *
+ * Token map:
+ *   --void     #0c0c0c   app bg          ← was #0a0a0f
+ *   --ink      #111111   nav/sidebar bg  ← was #0c0c14
+ *   --surface  #161616   content bg      ← was #141420
+ *   --panel    #222222   card bg         ← was #1c1c2e
+ *   --raised   #2a2a2a   raised element  ← was #252538
+ *   --border   #383838   borders         ← was #2a2a3e
+ *   --gold     #c4956a   primary accent  ← same
+ *   --parchment #f0f0f0  primary text    ← was #e8e8f0
+ *   --warm     #d0d0d0   body text       ← was #a0a0b8
+ *   --muted    #9a9a9a   muted text      ← was #6a6a82
+ *   --dim      #707070   placeholder     ← was #4a4a62
  */
 
 @theme {
-  /* Primary brand (warm terracotta) */
-  --color-co-primary: #c4956a;
+  /* ── Brand (gold — unchanged from Techne spec) ─────────────────────────── */
+  --color-co-primary:       #c4956a;
   --color-co-primary-hover: #d4a57a;
   --color-co-primary-muted: rgba(196, 149, 106, 0.15);
 
-  /* Surfaces (dark mode default) */
-  --color-co-bg: #0a0a0f;
-  --color-co-surface: #141420;
-  --color-co-surface-hover: #1c1c2e;
-  --color-co-surface-active: #252538;
-  --color-co-overlay: rgba(10, 10, 15, 0.85);
+  /* ── Surfaces (Techne neutral palette — no purple tint) ────────────────── */
+  /* co-bg = card layer (surface, #161616) — gives depth above outer void bg */
+  --color-co-bg:            #161616;
+  --color-co-surface:       #222222;
+  --color-co-surface-hover: #2a2a2a;
+  --color-co-surface-active:#383838;
+  --color-co-overlay:       rgba(12, 12, 12, 0.88);
 
-  /* Borders */
-  --color-co-border: #2a2a3e;
-  --color-co-border-hover: #3a3a4e;
+  /* ── Borders ─────────────────────────────────────────────────────────────── */
+  --color-co-border:        #383838;
+  --color-co-border-hover:  #505050;
 
-  /* Text */
-  --color-co-text: #e8e8f0;
-  --color-co-text-secondary: #a0a0b8;
-  --color-co-text-muted: #6a6a82;
-  --color-co-text-placeholder: #4a4a62;
+  /* ── Text (warm neutrals — no blue tint) ───────────────────────────────── */
+  --color-co-text:          #f0f0f0;
+  --color-co-text-secondary:#d0d0d0;
+  --color-co-text-muted:    #9a9a9a;
+  --color-co-text-placeholder: #707070;
 
-  /* Nav */
-  --color-co-nav-bg: #0c0c14;
+  /* ── Nav ─────────────────────────────────────────────────────────────────── */
+  --color-co-nav-bg:        #111111;
 
-  /* Semantic / status */
-  --color-co-success: #6ad19f;
-  --color-co-warning: #e6b96a;
-  --color-co-danger: #e07070;
-  --color-co-info: #8bbfff;
+  /* ── Semantic / status ──────────────────────────────────────────────────── */
+  --color-co-success:       #4ade80;
+  --color-co-warning:       #fbbf24;
+  --color-co-danger:        #ef4444;
+  --color-co-info:          #8bbfff;
 
-  /* Typography */
-  --font-mono-plex: "IBM Plex Mono", ui-monospace, monospace;
-  --font-serif-cormorant: "Cormorant", Georgia, serif;
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+  --font-mono-plex:    "IBM Plex Mono", ui-monospace, monospace;
+  --font-sans-inter:   "Inter", system-ui, sans-serif;
+  --font-serif-georgia: Georgia, "Times New Roman", serif;
 }
 
+/* ── Techne design tokens (canonical names + --co-* aliases) ─────────────── */
 :root {
-  /* Also expose as plain CSS custom properties so non-Tailwind inline styles
-     that reference `var(--co-*)` continue to work. */
-  --co-primary: var(--color-co-primary);
-  --co-primary-hover: var(--color-co-primary-hover);
-  --co-bg: var(--color-co-bg);
-  --co-surface: var(--color-co-surface);
-  --co-surface-hover: var(--color-co-surface-hover);
-  --co-border: var(--color-co-border);
-  --co-border-hover: var(--color-co-border-hover);
-  --co-text: var(--color-co-text);
-  --co-text-secondary: var(--color-co-text-secondary);
-  --co-text-muted: var(--color-co-text-muted);
-  --co-text-placeholder: var(--color-co-text-placeholder);
-  --co-nav-bg: var(--color-co-nav-bg);
-  --co-success: var(--color-co-success);
-  --co-warning: var(--color-co-warning);
-  --co-danger: var(--color-co-danger);
+  /* Canonical Techne tokens */
+  --void:     #0c0c0c;
+  --ink:      #111111;
+  --surface:  #161616;
+  --panel:    #222222;
+  --raised:   #2a2a2a;
+  --border:   #383838;
+  --border-dim: #2a2a2a;
+  --gold:     #c4956a;
+  --gold-06:  rgba(196, 149, 106, 0.06);
+  --gold-12:  rgba(196, 149, 106, 0.12);
+  --gold-20:  rgba(196, 149, 106, 0.20);
+  --gold-40:  rgba(196, 149, 106, 0.40);
+  --parchment:#f0f0f0;
+  --warm:     #d0d0d0;
+  --muted:    #9a9a9a;
+  --dim:      #707070;
+  --ghost:    #505050;
+
+  /* Status colors */
+  --status-ok:     #4ade80;
+  --status-warn:   #fbbf24;
+  --status-err:    #ef4444;
+  --status-info:   #8bbfff;
+  --status-teal:   #7ccfb8;
+  --status-purple: #a78bfa;
+  --status-orange: #fb923c;
+
+  /* Font stacks */
+  --mono: "IBM Plex Mono", "JetBrains Mono", "Fira Code", Consolas, monospace;
+  --sans: Inter, system-ui, sans-serif;
+  --serif: Georgia, "Times New Roman", serif;
+
+  /* ── --co-* aliases (keeps all component code working) ──────────────────── */
+  --co-primary:          var(--gold);
+  --co-primary-hover:    #d4a57a;
+  /* co-bg is used as card/panel bg — map to surface so cards have depth over void */
+  --co-bg:               var(--surface);
+  --co-surface:          var(--panel);
+  --co-surface-hover:    var(--panel);
+  --co-border:           var(--border);
+  --co-border-hover:     var(--ghost);
+  --co-text:             var(--parchment);
+  --co-text-secondary:   var(--warm);
+  --co-text-muted:       var(--muted);
+  --co-text-placeholder: var(--dim);
+  --co-nav-bg:           var(--ink);
+  --co-success:          var(--status-ok);
+  --co-warning:          var(--status-warn);
+  --co-danger:           var(--status-err);
+  --co-info:             var(--status-info);
 }
+
+/* ── Base reset ──────────────────────────────────────────────────────────── */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body, #root {
   height: 100%;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: var(--color-co-bg);
-  color: var(--color-co-text);
+  font-family: var(--sans);
+  background: var(--void);
+  color: var(--parchment);
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--color-co-info); text-decoration: none; }
+a { color: var(--status-info); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-co-border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-co-border-hover); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ghost); }
 
-/* Font utility classes referenced throughout the codebase */
-.font-mono-plex { font-family: var(--font-mono-plex); }
-.font-serif-cormorant { font-family: var(--font-serif-cormorant); }
+/* ── Font utility classes ─────────────────────────────────────────────────── */
+
+.font-mono-plex      { font-family: var(--mono); }
+.font-serif-georgia  { font-family: var(--serif); }
+/* legacy alias */
+.font-serif-cormorant { font-family: var(--serif); }
+
+/* ── Techne component patterns ───────────────────────────────────────────── */
+
+/* Section labels — e.g., panel headings */
+.techne-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Badges */
+.techne-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 0.63rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.techne-badge-gold {
+  color: var(--gold);
+  border-color: var(--gold-40);
+  background: var(--gold-06);
+}
+
+.techne-badge-info {
+  color: var(--status-info);
+  border-color: rgba(139, 191, 255, 0.35);
+  background: rgba(139, 191, 255, 0.07);
+}
+
+.techne-badge-ok {
+  color: var(--status-ok);
+  border-color: rgba(74, 222, 128, 0.35);
+  background: rgba(74, 222, 128, 0.07);
+}
+
+.techne-badge-warn {
+  color: var(--status-warn);
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.07);
+}
+
+/* Primary button */
+.techne-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  padding: 8px 16px;
+  min-height: 36px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.techne-btn-primary {
+  color: var(--gold);
+  background: var(--gold-20);
+  border-color: var(--gold-40);
+}
+.techne-btn-primary:hover {
+  background: rgba(196, 149, 106, 0.28);
+  border-color: rgba(196, 149, 106, 0.6);
+  color: #d4a57a;
+}
+
+.techne-btn-ghost {
+  color: var(--muted);
+  background: transparent;
+  border-color: var(--border);
+}
+.techne-btn-ghost:hover {
+  color: var(--parchment);
+  border-color: var(--ghost);
+}
+
+/* Metric card (2px gold accent bar at top) */
+.techne-metric-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  border-top: 2px solid var(--gold);
+  padding: 1rem;
+}
+
+/* Panel / card */
+.techne-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Nav item */
+.techne-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.techne-nav-item:hover {
+  color: var(--warm);
+  border-left-color: var(--border);
+}
+
+.techne-nav-item.active {
+  color: var(--gold);
+  border-left-color: var(--gold);
+  background: var(--gold-12);
+}
+
+/* Status bar */
+.techne-status-bar {
+  background: var(--ink);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
